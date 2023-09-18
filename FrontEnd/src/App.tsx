@@ -1,18 +1,17 @@
 import './App.css'
 import { BrowserRouter } from "react-router-dom";
-import { AppLayout } from "../components/AppLayout";
-
-
+import { AppLayout } from "../src/components/pages/AppLayout";
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
 function App() {
-
   return (
     <>
-      <BrowserRouter>
-        <AppLayout />
-      </BrowserRouter>
-
+      <Provider store={store}>
+        <BrowserRouter>
+          <AppLayout />
+        </BrowserRouter>
+      </Provider>
     </>
   )
 }
-
 export default App

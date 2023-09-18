@@ -1,0 +1,7 @@
+{
+    "name": "Card Game",
+    "db": {
+        "address": "mongodb://localhost:27017/cardGame"
+    },
+    "jwt_key": "sdf4s15fsdf211suikjgfldDFGads515t5bdfssd5fs5dFS5df"
+}
