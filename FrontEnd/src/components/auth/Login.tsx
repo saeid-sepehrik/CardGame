@@ -1,14 +1,29 @@
 import { Button, Form, Input } from "antd";
-import { useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { login } from "./auth.slice";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export const Login = () => {
+  const auth = useAppSelector((s) => s.auth);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (auth.token) navigate("/dashbord");
+  }, [auth]);
+
   interface login {
     email: string;
     password: string;
   }
 
-  const dispatch = useAppDispatch();
+  type FieldType = {
+    email?: string;
+    password?: string;
+    remember?: string;
+  };
+
   const onFinish = (values: login) => {
     dispatch(login(values));
   };
@@ -27,15 +42,15 @@ export const Login = () => {
         initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
-        autoComplete="off"
+        // autoComplete="off"
       >
         <Form.Item<FieldType>
-          label="Username"
-          name="username"
+          label="email"
+          name="email"
           rules={[
             {
               required: true,
-              message: "Please input your username!",
+              message: "Please input your email!",
               type: "email",
             },
           ]}
