@@ -3,7 +3,7 @@ import Meta from "antd/es/card/Meta";
 import { useCallback, useEffect, useState } from "react";
 import { IRole } from "../../models/models";
 import { CheckSquareOutlined } from "@ant-design/icons";
-import axios from "axios";
+import { appApi } from "../../utility/appApi";
 
 export interface dataProps {
   scenario: number;
@@ -30,9 +30,7 @@ export const Role = ({
   useEffect(() => {
     (async function () {
       // setLoading(true);
-      const resp = await axios.get(
-        `http://localhost:3000/api/role/${scenario}`
-      );
+      const resp = await appApi.get(`api/role/${scenario}`);
       setdataRole(resp.data.data);
 
       const a: Array<string> = [];

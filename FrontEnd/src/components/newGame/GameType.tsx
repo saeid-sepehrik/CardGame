@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { IGroupType } from "../../models/models";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { incrementByAmount } from "./step.slice";
-import axios from "axios";
+import { appApi } from "../../utility/appApi";
 
 export interface dataProps {
   setgameTypeName: (gameTypeName: string) => void;
@@ -25,7 +25,7 @@ export const GameType = ({
   useEffect(() => {
     (async function () {
       // setLoading(true);
-      const resp = await axios.get(`http://localhost:3000/api/gameType`);
+      const resp = await appApi.get(`api/gameType`);
 
       setdata(resp.data.data);
 
