@@ -7,10 +7,12 @@ export interface authState {
   token: string;
 }
 
+const init = JSON.parse(localStorage.getItem("auth") || "{}");
 const initialState: authState = {
   loading: false,
   email: "",
   token: "",
+  ...init,
 };
 
 interface LoginState {
@@ -43,6 +45,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.token = action.payload.token;
         state.email = action.payload.email;
+        localStorage.setItem("auth", JSON.stringify(state));
       });
   },
 });
