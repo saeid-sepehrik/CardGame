@@ -7,9 +7,9 @@ export const appApi = axios.create({
 
 appApi.interceptors.request.use((config) => {
   const token = store.getState().auth.token;
+  console.log("=>>>>" + token);
   if (token) {
-    config.headers["token"] = token;
-    //bearer TOKEN
+    config.headers["x-auth-token"] = token;
   }
   return config;
 });
