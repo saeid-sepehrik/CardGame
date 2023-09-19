@@ -1,17 +1,19 @@
 import { configureStore } from "@reduxjs/toolkit";
 import stepSlice from "../components/newGame/step.slice";
+import authSlice from "../components/auth/auth.slice";
 // import counterReducer from "../components/Counter.slice";
 // import taskListReducer from "../components/task/TaskList.slice";
 // import authReducer from "../components/pages/auth/auth.slice";
 // ...
 
 export const store = configureStore({
-    reducer: {
-        step: stepSlice
-        // counter: counterReducer,
-        // taskList: taskListReducer,
-        // auth: authReducer,
-    },
+  reducer: {
+    step: stepSlice,
+    auth: authSlice,
+    // counter: counterReducer,
+    // taskList: taskListReducer,
+    // auth: authReducer,
+  },
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
