@@ -5,6 +5,7 @@ import { NewGame } from "../newGame/newGame";
 import { Footer } from "antd/es/layout/layout";
 import { Login } from "../auth/Login";
 import { Main } from "../dashbord/main";
+import { ProtectedRout } from "./protectedRout";
 
 const { Header, Content } = Layout;
 
@@ -17,7 +18,14 @@ export const AppLayout = () => {
           <Route path="/" element={<Home></Home>} />
           <Route path="/newGame" element={<NewGame />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/dashbord" element={<Main />} />
+          <Route
+            path="/dashbord"
+            element={
+              <ProtectedRout>
+                <Main />
+              </ProtectedRout>
+            }
+          />
         </Routes>
       </Content>
       <Footer>Footer</Footer>
