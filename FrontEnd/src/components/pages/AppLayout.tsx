@@ -6,13 +6,16 @@ import { Footer } from "antd/es/layout/layout";
 import { Login } from "../auth/Login";
 import { Main } from "../dashbord/main";
 import { ProtectedRout } from "./protectedRout";
+import { HeaderComponent } from "./headerComponent";
 
 const { Header, Content } = Layout;
 
 export const AppLayout = () => {
   return (
     <Layout>
-      <Header> header </Header>
+      <Header>
+        <HeaderComponent />
+      </Header>
       <Content>
         <Routes>
           <Route path="/" element={<Home></Home>} />
