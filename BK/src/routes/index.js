@@ -8,6 +8,7 @@ const scenario = require("./scenario");
 const role = require("./role");
 const game = require("./game");
 const gameRole = require("./gameRole");
+const player = require("./player");
 const { isLoggined, isAdmin } = require("./../middlewares/auth");
 const error = require("./../middlewares/error");
 
@@ -19,6 +20,7 @@ router.use("/scenario", scenario);
 router.use("/role", role);
 router.use("/game", game);
 router.use("/gameRole", gameRole);
+router.use("/player", player);
 
 router.use(error);
 

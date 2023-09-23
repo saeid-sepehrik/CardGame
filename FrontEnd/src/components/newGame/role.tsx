@@ -4,6 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import { IRole } from "../../models/models";
 import { CheckSquareOutlined } from "@ant-design/icons";
 import { appApi } from "../../utility/appApi";
+import { setDataRoleSelected } from "./role.slice";
+import { useAppDispatch } from "../../redux/hooks";
 
 export interface dataProps {
   scenario: number;
@@ -26,11 +28,11 @@ export const Role = ({
 }: dataProps) => {
   const [dataRole, setdataRole] = useState<IRole[]>([]);
   const [increaseItem, setincreaseItem] = useState("");
-
+  const dispatch = useAppDispatch();
   useEffect(() => {
     (async function () {
       // setLoading(true);
-      const resp = await appApi.get(`api/role/${scenario}`);
+      const resp = await appApi.get(`role/${scenario}`);
       setdataRole(resp.data.data);
 
       const a: Array<string> = [];
@@ -115,6 +117,7 @@ export const Role = ({
                     onClick={() => {
                       const a: Array<IRole> = [...dataRoleSelected, r];
                       setdataRoleSelected(a);
+                      dispatch(setDataRoleSelected(a));
                       if (r.just_one) removeRole(r);
                       setincrease(r);
                     }}

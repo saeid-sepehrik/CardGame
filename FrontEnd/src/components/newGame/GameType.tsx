@@ -25,7 +25,7 @@ export const GameType = ({
   useEffect(() => {
     (async function () {
       // setLoading(true);
-      const resp = await appApi.get(`api/gameType`);
+      const resp = await appApi.get(`gameType`);
 
       setdata(resp.data.data);
 

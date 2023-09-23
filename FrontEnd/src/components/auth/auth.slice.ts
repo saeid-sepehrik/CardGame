@@ -23,7 +23,7 @@ interface LoginState {
 export const login = createAsyncThunk(
   "auth/login",
   async (loginData: LoginState) => {
-    const resp = await appApi.post("api/auth/login", loginData);
+    const resp = await appApi.post("auth/login", loginData);
     return { token: resp.data.data.token, email: resp.data.data.email };
   }
 );

@@ -3,6 +3,8 @@ import { IGame, IRole } from "../../models/models";
 import { CommentOutlined, GoldTwoTone } from "@ant-design/icons";
 import { Alert, Button, ConfigProvider, Space } from "antd";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../redux/hooks";
+import { setDataGame } from "../game/waitingGame.slice";
 export interface dataProps {
   scenario: number;
   gameTypeName: string;
@@ -16,15 +18,16 @@ export const Done = ({
   scenarioName,
   dataRoleSelected,
 }: dataProps) => {
-  const [game, setgame] = useState<IGame>();
+  const [dataGameUse, setdataGameUse] = useState<IGame>();
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [warning, setwarning] = useState(false);
   const [chooseOnline, setchooseOnline] = useState(false);
   const navigate = useNavigate();
-  localStorage.removeItem("codeGame");
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (chooseOnline)
+    if (chooseOnline && dataGameUse === undefined) {
+      localStorage.removeItem("idGame");
       (async function () {
         // setLoading(true);
         const requestOptions = {
@@ -43,22 +46,22 @@ export const Done = ({
           requestOptions
         );
         const json = await resp.json();
-        console.log(json);
-        setgame(json.data);
+        dispatch(setDataGame(json.data));
+        setdataGameUse(json.data);
       })();
+    }
   }, [chooseOnline, gameTypeName, scenario, scenarioName]);
 
   useEffect(() => {
-    console.log("000000000000");
-    if (game !== undefined)
-      if (game.code > 0) {
+    if (dataGameUse !== undefined) {
+      (async function () {
         dataRoleSelected.forEach((drs) => {
           (async function () {
             const requestOptions = {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
-                id_game: game._id,
+                id_game: dataGameUse._id,
                 id_role: drs._id,
                 status: 1,
               }),
@@ -68,22 +71,22 @@ export const Done = ({
               requestOptions
             );
             const json = await resp.json();
-            console.log(json);
           })();
         });
-        localStorage.setItem("codeGame", game.code.toString());
-        navigate("../game/waiting");
-      }
-  }, [game]);
+        localStorage.setItem("idGame", dataGameUse._id);
+        navigate("/waiting");
+      })();
+    }
+  }, [dataGameUse]);
 
   const countinueOnline = () => {
     if (isOnline) {
       setchooseOnline(true);
-      console.log("online");
+      // console.log("online");
       setwarning(false);
     } else {
       setwarning(true);
-      console.log("ofline");
+      // console.log("ofline");
     }
   };
 
