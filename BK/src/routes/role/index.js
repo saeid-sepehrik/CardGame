@@ -1,7 +1,23 @@
 const express = require("express");
 const router = express.Router();
+
 const Role = require("../../models/role");
 
+router.post("/game/game", async (req, res) => {
+  const role = await Role.find({ _id: { $in: req.body.ids } });
+  if (!role) {
+    res.status(404),
+      res.json({
+        data: null,
+        message: "rooole not found",
+      });
+  } else {
+    res.json({
+      data: role,
+      message: "OK33",
+    });
+  }
+});
 router.get("/", async (req, res) => {
   const role = await Rule.find();
   res.json({
@@ -25,32 +41,7 @@ router.get("/:code", async (req, res) => {
   }
   res.json({
     data: role,
-    message: "OK33",
-  });
-});
-
-router.get("/multi/:id", async (req, res) => {
-  // res.send("ssdsds0");
-
-  const a = req.body.ids;
-  const g = req.body.group;
-  const role = await Role.find({
-    // _id: "65006739cc515e94c77fcd6d",
-    _id: { $in: a },
-    // group: { $in: ["mafia", "650067b0cc515e94c77fcd6e"] },
-    // mask_code_scenarios: { $in: [3, 4] },
-  });
-  console.log(a);
-  if (!role) {
-    res.status(404),
-      res.json({
-        data: null,
-        message: "scenario not found",
-      });
-  }
-  res.json({
-    data: role,
-    message: "OK333",
+    message: "OK335",
   });
 });
 
@@ -60,13 +51,14 @@ router.get("/id/:id", async (req, res) => {
     res.status(404),
       res.json({
         data: null,
-        message: "scenario not found",
+        message: "scenarioo not found",
       });
+  } else {
+    res.json({
+      data: role,
+      message: "OK334",
+    });
   }
-  res.json({
-    data: role,
-    message: "OK33",
-  });
 });
 
 module.exports = router;

@@ -1,13 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { appApi } from "../../utility/appApi";
-import { IGame, IGameRole, IRole } from "../../models/models";
+import { IGame, IGameRole } from "../../models/models";
 
 export interface IGameRoleFull {
   id: string;
   id_game: string;
   id_role: string;
   status: number;
-  role: IRole[];
+  pic_path: string;
+  color: string;
+  title: string;
+  group: string;
 }
 
 export interface waitingState {
@@ -17,7 +20,7 @@ export interface waitingState {
   codeGame: number;
   dataRoleGame: IGameRole[];
   dataGame: IGame;
-  dataRoleGameFull: IGameRoleFull;
+  dataRoleGameFull: IGameRoleFull[];
 }
 
 const initialState: waitingState = {
@@ -34,13 +37,18 @@ const initialState: waitingState = {
     status: 0,
     code: 0,
   },
-  dataRoleGameFull: {
-    id: "",
-    id_game: "",
-    id_role: "",
-    status: 0,
-    role: [],
-  },
+  dataRoleGameFull: [
+    {
+      id: "",
+      id_game: "",
+      id_role: "",
+      status: 0,
+      pic_path: "",
+      color: "",
+      title: "",
+      group: "",
+    },
+  ],
 };
 
 export const setRoleGame = createAsyncThunk(
@@ -64,22 +72,23 @@ const waitingGameSlice = createSlice({
     },
     setDataGameRoleFull: (state, action) => {
       state.dataRoleGameFull = action.payload;
+      state.loading = false;
     },
     setCountJoined: (state, action) => {
       state.countJoined = action.payload;
     },
+    setloading: (state, action) => {
+      state.loading = action.payload;
+    },
   },
   extraReducers: (builder) => {
-    builder.addCase(setRoleGame.pending, (state) => {
-      state.loading = true;
-    });
+    builder.addCase(setRoleGame.pending, () => {});
     builder.addCase(setRoleGame.fulfilled, (state, action) => {
-      state.loading = false;
       state.dataRoleGame = action.payload.data;
       state.countAllPlayer = state.dataRoleGame.length;
     });
   },
 });
-export const { setDataGame, setDataGameRoleFull, setCountJoined } =
+export const { setDataGame, setDataGameRoleFull, setCountJoined, setloading } =
   waitingGameSlice.actions;
 export default waitingGameSlice.reducer;

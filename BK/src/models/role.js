@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 const roleSchema = new mongoose.Schema({
-  _id: { type: String, required: true },
   title: { type: String, required: true },
   title_fn: { type: String, required: true },
   is_active: { type: Boolean, default: true },

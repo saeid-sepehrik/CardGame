@@ -8,6 +8,7 @@ import { Main } from "../dashbord/main";
 import { ProtectedRout } from "./protectedRout";
 import { HeaderComponent } from "./headerComponent";
 import { WaitingGame } from "../game/waitingGame";
+import { Game } from "../game/game";
 
 const { Header, Content } = Layout;
 
@@ -23,6 +24,7 @@ export const AppLayout = () => {
           <Route path="/newGame" element={<NewGame />} />
           <Route path="/login" element={<Login />} />
           <Route path="/waiting" element={<WaitingGame />} />
+          <Route path="/game" element={<Game />} />
           <Route
             path="/dashbord"
             element={
