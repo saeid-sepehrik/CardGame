@@ -21,35 +21,52 @@ router.get("/:id", async (req, res) => {
 
 router.post(
   "/",
-  [
-    body("code_scenario", "id_scenario is null!").notEmpty(),
-    body("title_game_type", "title_game type is null!").notEmpty(),
-    body("title_scenario", "title scenario is null!").notEmpty(),
-    body("code", "code is null!").notEmpty(),
-    body("status", "status is null!").notEmpty(),
-  ],
+  // [
+  //   body.data("code_scenario", "id_scenario is null!").notEmpty(),
+  //   body.data("title_game_type", "title_game type is null!").notEmpty(),
+  //   body.data("title_scenario", "title scenario is null!").notEmpty(),
+  //   body.data("code", "code is null!").notEmpty(),
+  //   body.data("status", "status is null!").notEmpty(),
+  // ],
   async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        data: null,
-        errors: errors.array(),
-        message: "validation error",
-      });
-    }
+    // const errors = validationResult(req);
+    // if (!errors.isEmpty()) {
+    //   return res.status(400).json({
+    //     data: null,
+    //     errors: errors.array(),
+    //     message: "validation error",
+    //   });
+    // }
     let newGame = new gameModel({
-      code_scenario: req.body.code_scenario,
-      title_game_type: req.body.title_game_type,
-      title_scenario: req.body.title_scenario,
-      status: req.body.status,
-      code: req.body.code,
+      code_scenario: req.body.data.code_scenario,
+      id_game_type: req.body.data.id_game_type,
+      status: req.body.data.status,
+      code: req.body.data.code,
     });
+    // console.log(newGame);
     newGame = await newGame.save();
     res.json({
       data: newGame,
-      message: "insert new game",
+      message: "insert game",
     });
   }
 );
+
+router.put("/:id", async (req, res) => {
+  const filter = { _id: req.params.id };
+  const updateDoc = {
+    $set: {
+      code_scenario: req.body.data.code_scenario,
+      id_game_type: req.body.data.id_game_type,
+      status: req.body.data.status,
+      code: req.body.data.code,
+    },
+  };
+  const game = await Game.updateOne(filter, updateDoc);
+  res.json({
+    data: req.body.data,
+    message: "OK33",
+  });
+});
 
 module.exports = router;

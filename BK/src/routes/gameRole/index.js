@@ -46,6 +46,8 @@ router.post(
     let newGameRole = new GameRole({
       id_game: req.body.id_game,
       id_role: req.body.id_role,
+      id_user: req.body.id_user,
+      score: req.body.score,
       status: 1,
     });
     newGameRole = await newGameRole.save();
@@ -55,5 +57,23 @@ router.post(
     });
   }
 );
+
+router.put("/:id", async (req, res) => {
+  const filter = { _id: req.params.id };
+  const updateDoc = {
+    $set: {
+      id_game: req.body.data.id_game,
+      id_role: req.body.data.id_role,
+      status: req.body.data.status,
+      id_user: req.body.data.id_user,
+      score: req.body.data.score,
+    },
+  };
+  const roleGame = await GameRole.updateOne(filter, updateDoc);
+  res.json({
+    data: req.body.data,
+    message: "OK33",
+  });
+});
 
 module.exports = router;

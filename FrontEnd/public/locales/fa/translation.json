@@ -1,0 +1,29 @@
+{
+  "button": {
+    "join_game": "ورود به بازی",
+    "create_game": "ایجاد بازی",
+    "continue_online": "ادامه آنلاین",
+    "continue_ofline": "ادامه آفلاین",
+    "division_role": "تقسیم نقش ها",
+    "next": "بعدی",
+    "killed": "کشته شد"
+  },
+  "steps": {
+    "type": "نوع بازی",
+    "Scenarion": "سناریو",
+    "Roles": "نقش ها",
+    "done": "شیوه انجام"
+  },
+  "waiting": {
+    "code_game": "کد بازی",
+    "label": "وارد شوید",
+    "joined": "وارد شد",
+    "card_title": "در انتظار",
+    "card_detaile_1": "در انتظار برای ",
+    "card_detaile_2": "بازیکن دیگر",
+    "status": "وضعیت"
+  },
+  "config": {
+    "direction": "rtl"
+  }
+}

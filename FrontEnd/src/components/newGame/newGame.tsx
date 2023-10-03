@@ -1,18 +1,13 @@
 import { useState } from "react";
-import { GameType } from "./GameType";
-import { Scenario } from "./scenario";
-import { Role } from "./role";
-import { Step } from "./step";
-import { BadgeRole } from "./badgeRole";
-import { Done } from "./done";
+
+import { GameType, Scenario, Role, Step, BadgeRole, Done } from "./index";
+
 import { IRole } from "../../models/models";
 import { useAppSelector } from "../../redux/hooks";
 
 export const NewGame = () => {
-  const [gameType, setgameType] = useState("");
-  const [gameTypeName, setgameTypeName] = useState("");
+  const [gameTypeId, setgameTypeId] = useState("");
   const [scenario, setscenario] = useState(0);
-  const [scenarioName, setscenarioName] = useState("");
   const [groupCount, setgroupCount] = useState<number[]>([]);
   const [group, setGroup] = useState<string[]>([""]);
   const [dataRoleSelected, setdataRoleSelected] = useState<IRole[]>([]);
@@ -22,17 +17,9 @@ export const NewGame = () => {
     <>
       <Step />
       <BadgeRole groupCount={groupCount} group={group}></BadgeRole>
-      <GameType
-        setgameTypeName={setgameTypeName}
-        gameType={gameType}
-        setgameType={setgameType}
-      ></GameType>
+      <GameType setgameTypeId={setgameTypeId}></GameType>
       {step.value == 1 && (
-        <Scenario
-          setscenarioName={setscenarioName}
-          gameType={gameType}
-          setscenario={setscenario}
-        ></Scenario>
+        <Scenario gameTypeId={gameTypeId} setscenario={setscenario}></Scenario>
       )}
       {step.value == 2 && (
         <Role
@@ -47,9 +34,8 @@ export const NewGame = () => {
       )}
       {step.value == 3 && (
         <Done
+          gameTypeId={gameTypeId}
           scenario={scenario}
-          gameTypeName={gameTypeName}
-          scenarioName={scenarioName}
           dataRoleSelected={dataRoleSelected}
         ></Done>
       )}

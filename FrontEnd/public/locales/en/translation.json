@@ -1,0 +1,29 @@
+{
+  "button": {
+    "join_game": "Join to game",
+    "create_game": "Create new",
+    "continue_online": "Continue online",
+    "continue_ofline": "Continue ofline ",
+    "division_role": "Division of roles",
+    "next": "next",
+    "killed": "killed"
+  },
+  "steps": {
+    "type": "type",
+    "Scenarion": "Scenarion",
+    "Roles": "Roles",
+    "done": "How to start?"
+  },
+  "waiting": {
+    "code_game": "Code game",
+    "label": "join with code",
+    "joined": "joined",
+    "card_title": "waiting",
+    "card_detaile_1": "waiting for ",
+    "card_detaile_2": "more players",
+    "status": "status"
+  },
+  "config": {
+    "direction": "ltr"
+  }
+}

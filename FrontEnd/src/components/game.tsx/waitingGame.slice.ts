@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { appApi } from "../../utility/appApi";
-import { IGame, IGameRole } from "../../models/models";
+import { IGame, IGameRole, Iplayer } from "../../models/models";
 
 export interface IGameRoleFull {
   id: string;
@@ -21,6 +21,7 @@ export interface waitingState {
   dataRoleGame: IGameRole[];
   dataGame: IGame;
   dataRoleGameFull: IGameRoleFull[];
+  dataPlayer: Iplayer[];
 }
 
 const initialState: waitingState = {
@@ -49,6 +50,7 @@ const initialState: waitingState = {
       group: "",
     },
   ],
+  dataPlayer: [],
 };
 
 export const setRoleGame = createAsyncThunk(
@@ -57,13 +59,19 @@ export const setRoleGame = createAsyncThunk(
     const resp = await appApi.get(
       "/gameRole/" + localStorage.getItem("idGame")
     );
-    const countAll = 2;
-    return { data: resp.data.data, count: countAll };
+    return { data: resp.data.data };
   }
 );
 
+export const setPlayer = createAsyncThunk("waitingGame/player", async () => {
+  const resp = await appApi.get(
+    "/player/joinGame/" + localStorage.getItem("idGame")
+  );
+  return { data: resp.data.data };
+});
+
 const waitingGameSlice = createSlice({
-  name: "waitingGame",
+  name: "game",
   initialState,
   reducers: {
     setDataGame: (state, action) => {
@@ -73,9 +81,6 @@ const waitingGameSlice = createSlice({
     setDataGameRoleFull: (state, action) => {
       state.dataRoleGameFull = action.payload;
       state.loading = false;
-    },
-    setCountJoined: (state, action) => {
-      state.countJoined = action.payload;
     },
     setloading: (state, action) => {
       state.loading = action.payload;
@@ -87,8 +92,13 @@ const waitingGameSlice = createSlice({
       state.dataRoleGame = action.payload.data;
       state.countAllPlayer = state.dataRoleGame.length;
     });
+    builder.addCase(setPlayer.pending, () => {});
+    builder.addCase(setPlayer.fulfilled, (state, action) => {
+      state.dataPlayer = action.payload.data;
+      state.countJoined = action.payload.data.length;
+    });
   },
 });
-export const { setDataGame, setDataGameRoleFull, setCountJoined, setloading } =
+export const { setDataGame, setDataGameRoleFull, setloading } =
   waitingGameSlice.actions;
 export default waitingGameSlice.reducer;

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Card, Col, ConfigProvider, Row } from "antd";
 import Meta from "antd/es/card/Meta";
 import { useCallback, useEffect, useState } from "react";
@@ -6,8 +7,9 @@ import { CheckSquareOutlined } from "@ant-design/icons";
 import { appApi } from "../../utility/appApi";
 import { setDataRoleSelected } from "./role.slice";
 import { useAppDispatch } from "../../redux/hooks";
+import { useTranslation } from "react-i18next";
 
-export interface dataProps {
+export interface RoleProps {
   scenario: number;
   dataRoleSelected: IRole[];
   setdataRoleSelected: (dataRoleSelected: IRole[]) => void;
@@ -25,10 +27,11 @@ export const Role = ({
   setGroup,
   groupCount,
   setgroupCount,
-}: dataProps) => {
+}: RoleProps) => {
   const [dataRole, setdataRole] = useState<IRole[]>([]);
   const [increaseItem, setincreaseItem] = useState("");
   const dispatch = useAppDispatch();
+  const { i18n } = useTranslation();
   useEffect(() => {
     (async function () {
       // setLoading(true);
@@ -37,12 +40,12 @@ export const Role = ({
 
       const a: Array<string> = [];
       resp.data.data.map((m: IRole) => {
-        a.push(m.group as " ");
+        a.push((m as any)["group_" + i18n.language]);
       });
       const ba: Array<string> = [...new Set(a)];
       setGroup(ba);
     })();
-  }, [scenario]);
+  }, [scenario, setGroup]);
 
   useEffect(() => {
     if (increaseItem !== "") {
@@ -73,7 +76,7 @@ export const Role = ({
         setincreaseItem("");
       }
     }
-  }, [increaseItem]);
+  }, [group, groupCount, increaseItem, setgroupCount]);
 
   const removeRole = useCallback(
     (role: IRole) => {
@@ -84,7 +87,7 @@ export const Role = ({
 
   const setincrease = useCallback(
     (role: IRole) => {
-      setincreaseItem(role.group as "");
+      setincreaseItem((role as any)["group_" + i18n.language]);
     },
     [dataRoleSelected]
   );
@@ -112,7 +115,7 @@ export const Role = ({
                   }}
                 >
                   <Card
-                    title={r.title}
+                    title={(r as any)["title_" + i18n.language]}
                     size="small"
                     onClick={() => {
                       const a: Array<IRole> = [...dataRoleSelected, r];
@@ -149,7 +152,7 @@ export const Role = ({
                   }}
                 >
                   <Card
-                    title={r.title}
+                    title={(r as any)["title_" + i18n.language]}
                     size="small"
                     style={{ width: "100%", float: "left", padding: "5px" }}
                     cover={<img alt="example" src={r.pic_path as ""} />}

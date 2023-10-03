@@ -1,23 +1,25 @@
-
-import { AppstoreAddOutlined, LoginOutlined } from '@ant-design/icons';
+import { AppstoreAddOutlined, LoginOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
-
+import { useTranslation } from "react-i18next";
 
 export const Home = () => {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+  return (
+    <>
+      <Button
+        onClick={() => navigate("/newGame")}
+        type="primary"
+        shape="round"
+        icon={<AppstoreAddOutlined />}
+      >
+        {t("button.create_game")}
+      </Button>
 
-    const navigate = useNavigate();
-
-    // const toggleShowComponents = () => {
-    //     setshowListGame(!showListGame);
-
-    // };
-    return (
-        <>
-            <Button onClick={() => navigate('/newGame')} type="primary" shape="round" icon={<AppstoreAddOutlined />}>create new</Button>
-            <Button type="primary" shape="round" icon={<LoginOutlined />}>join to game</Button>
-
-            {/* {showListGame && <ListGame></ListGame>} */}
-        </>
-    )
-}
+      <Button type="primary" shape="round" icon={<LoginOutlined />}>
+        {t("button.join_game")}
+      </Button>
+    </>
+  );
+};

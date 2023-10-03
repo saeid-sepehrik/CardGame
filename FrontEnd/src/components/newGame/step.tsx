@@ -7,14 +7,16 @@ import {
 import { Steps } from "antd";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { incrementByAmount } from "./step.slice";
+import { useTranslation } from "react-i18next";
 
-export interface dataProps {
+export interface StepProps {
   curentStep: number;
   setcurentStep: (curentStep: number) => void;
 }
 export const Step = () => {
   const step = useAppSelector((s) => s.step);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   return (
     <>
@@ -26,19 +28,19 @@ export const Step = () => {
         }}
         items={[
           {
-            title: "Type",
+            title: `${t("steps.type")}`,
             icon: <UserOutlined />,
           },
           {
-            title: "Scenarion",
+            title: `${t("steps.Scenarion")}`,
             icon: <SolutionOutlined />,
           },
           {
-            title: "Roles",
+            title: `${t("steps.Roles")}`,
             icon: <OrderedListOutlined />,
           },
           {
-            title: "How to start?",
+            title: `${t("steps.done")}`,
             icon: <SmileOutlined />,
           },
         ]}

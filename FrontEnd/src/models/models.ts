@@ -1,7 +1,6 @@
 export interface IGroupType {
   _id: string;
   title: string;
-  title_fn: string;
   is_active: boolean;
   pic_path: string;
   dsc: string;

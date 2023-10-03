@@ -1,15 +1,17 @@
 import { Avatar, Badge, Button, Col, Row } from "antd";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { incrementByAmount } from "./step.slice";
+import { useTranslation } from "react-i18next";
 
-export interface dataProps {
+export interface BadgeRoleProps {
   group: string[];
   groupCount: number[];
 }
 
-export const BadgeRole = ({ group, groupCount }: dataProps) => {
+export const BadgeRole = ({ group, groupCount }: BadgeRoleProps) => {
   const step = useAppSelector((s) => s.step);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   return (
     <>
       {step.value === 2 && (
@@ -35,7 +37,7 @@ export const BadgeRole = ({ group, groupCount }: dataProps) => {
 
                 <Col span={10}>
                   <Button onClick={() => dispatch(incrementByAmount(3))}>
-                    next
+                    {t("button.next")}
                   </Button>
                 </Col>
               </Row>

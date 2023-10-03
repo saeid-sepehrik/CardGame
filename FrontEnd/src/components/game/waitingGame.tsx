@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import {
   Badge,
@@ -10,152 +11,77 @@ import {
   Space,
   Statistic,
 } from "antd";
-import { IGameRole, IRole, Iplayer } from "../../models/models";
-import { appApi } from "../../utility/appApi";
 import { ArrowRightOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import {
-  setCountJoined,
-  setDataGame,
-  setDataGameRoleFull,
+  setPlayer,
   setRoleGame,
-  setloading,
-} from "./waitingGame.slice";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { setDataRoleSelected } from "../newGame/role.slice";
+  updateGame,
+  updateRoleGame,
+} from "./game.slice";
+import { useTranslation } from "react-i18next";
+import { shuffle } from "../../utility/functions";
+import { appApi } from "../../utility/appApi";
+import { IGameRole } from "../../models/models";
 
 export const WaitingGame = () => {
-  const [roleIds, setroleIds] = useState<string[]>([]);
-  const [players, setplayers] = useState<Iplayer[]>([]);
-  const [getNewData, setgetNewData] = useState(false);
-  const [ReadyForsetRoleGameFull, setReadyForsetRoleGameFull] = useState(0);
-  const waiting = useAppSelector((s) => s.waiting);
+  // const [players, setplayers] = useState<Iplayer[]>([]);
+  const gameSelector = useAppSelector((s) => s.game);
   const dispatch = useAppDispatch();
-  const roleSelector = useAppSelector((s) => s.role);
-  const waitingSelector = useAppSelector((s) => s.waiting);
   const twoColors = { "0%": "#108ee9", "100%": "#87d068" };
-  const navigator = useNavigate();
-
-  useEffect(() => {
-    if (waitingSelector.codeGame === 0) {
-      setgetNewData(true);
-      dispatch(setloading(true));
-    } else {
-      dispatch(setloading(false));
-    }
-  }, []);
-
-  /////roleGame
-  useEffect(() => {
-    if (getNewData) {
-      (async function () {
-        const ids: string[] = [];
-        // setLoading(true);
-        const resp = await axios.get(
-          `http://localhost:3000/api/gameRole/${localStorage.getItem("idGame")}`
-        );
-        const a: IGameRole[] = resp.data.data;
-        a.map((m) => ids.push(m.id_role));
-        dispatch(setRoleGame());
-        setroleIds(ids);
-        setReadyForsetRoleGameFull(ReadyForsetRoleGameFull + 1);
-      })();
-    }
-  }, [getNewData, waitingSelector.codeGame]);
-
-  //////game
-  useEffect(() => {
-    if (getNewData) {
-      (async function () {
-        // setLoading(true);
-        const resp = await axios.get(
-          `http://localhost:3000/api/game/${localStorage.getItem("idGame")}`
-        );
-        dispatch(setDataGame(resp.data.data[0]));
-      })();
-    }
-  }, [getNewData]);
-
-  ////role
-  useEffect(() => {
-    // console.log(roleIds);
-    if (getNewData && roleIds !== null) {
-      (async function () {
-        const article = {
-          ids: roleIds,
-        };
-        console.log("article" + article.ids);
-        const resp = await axios.post(
-          "http://localhost:3000/api/role/game/game/",
-          article
-        );
-        console.log(resp.data.data);
-        dispatch(setDataRoleSelected(resp.data.data));
-        setReadyForsetRoleGameFull(ReadyForsetRoleGameFull + 1);
-      })();
-    }
-  }, [roleIds]);
-
-  ///roleGameFull
-  useEffect(() => {
-    if (
-      getNewData &&
-      ReadyForsetRoleGameFull === 2 &&
-      roleSelector.roleSelected !== null
-    ) {
-      const role: IRole[] = roleSelector.roleSelected;
-      const gameRole: IGameRole[] = waitingSelector.dataRoleGame;
-      // gameRole.map((m) =>
-      //   atemp.push({
-      //     ...m,
-      //     role: role.filter((f) => f._id === m.id_role),
-      //   })
-      // );
-      const atemp = gameRole.map((m) => ({
-        ...m,
-        pic_path: role.filter((f) => f._id === m.id_role)[0].pic_path,
-        color: role.filter((f) => f._id === m.id_role)[0].color,
-        title: role.filter((f) => f._id === m.id_role)[0].title,
-        group: role.filter((f) => f._id === m.id_role)[0].group,
-      }));
-
-      dispatch(setDataGameRoleFull(atemp));
-    }
-  }, [ReadyForsetRoleGameFull, dispatch]);
-
-  // ///roleGameFull
-  // useEffect(() => {
-  //   if (
-  //     getNewData &&
-  //     ReadyForsetRoleGameFull === 2 &&
-  //     roleSelector.roleSelected !== null
-  //   ) {
-  //     const atemp: any[] = [];
-  //     const role: IRole[] = roleSelector.roleSelected;
-  //     const gameRole: IGameRole[] = waitingSelector.dataRoleGame;
-  //     gameRole.map((m) =>
-  //       atemp.push({
-  //         ...m,
-  //         role: role.filter((f) => f._id === m.id_role),
-  //       })
-  //     );
-  //     dispatch(setDataGameRoleFull(atemp));
-  //   }
-  // }, [ReadyForsetRoleGameFull, dispatch]);
+  const { t } = useTranslation();
+  const [goToGame, setgoToGame] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
       (async function () {
-        const resp = await appApi.get(
-          "/player/joinGame/" + localStorage.getItem("idGame")
-        );
-        setplayers(resp.data.data);
-        dispatch(setCountJoined(resp.data.data.length));
+        dispatch(setPlayer());
       })();
     }, 5000);
     return () => clearInterval(interval);
   }, []);
+
+  // updateRoleGame;
+  useEffect(() => {
+    if (goToGame) {
+      (async function () {
+        const resp = await appApi.get(
+          "/gameRole/" + localStorage.getItem("idGame")
+        );
+        const temp: IGameRole[] = resp.data.data;
+        const id_player: string[] = [];
+        gameSelector.dataPlayer.map((p) => {
+          id_player.push(p._id);
+        });
+        const id_player_shufle = shuffle(id_player);
+        temp
+          .filter((f) => f.status === 1)
+          .map((m, index) => {
+            const new_obj = {
+              ...m,
+              id_user: id_player_shufle[index],
+              status: 2,
+            };
+            dispatch(updateRoleGame(new_obj));
+          });
+      })();
+    }
+  }, [goToGame]);
+
+  useEffect(() => {
+    if (gameSelector.UpdateedRoleGame) dispatch(setRoleGame());
+  }, [gameSelector.UpdateedRoleGame]);
+
+  useEffect(() => {
+    if (gameSelector.receivedRoleGame) {
+      dispatch(
+        updateGame({
+          ...gameSelector.dataGame,
+          status: 3,
+        })
+      );
+    }
+  }, [gameSelector.receivedRoleGame]);
 
   return (
     <>
@@ -175,29 +101,40 @@ export const WaitingGame = () => {
         }}
       >
         <Space direction="vertical" size="middle" style={{ width: "100%" }}>
-          <Badge.Ribbon text="code" color="blue" placement="start">
-            <Card title={"Code Game : " + waiting.dataGame.code} size="default">
-              {waiting.countAllPlayer === waitingSelector.countJoined && (
-                <Button
-                  type="primary"
-                  onClick={() => navigator("/game/")}
-                  shape="round"
-                  size="large"
-                  icon={<ArrowRightOutlined />}
-                >
-                  Division of roles
-                </Button>
-              )}
+          <Badge.Ribbon
+            text={t("waiting.label")}
+            color="blue"
+            placement="start"
+          >
+            <Card
+              title={`${t("waiting.code_game")} : ${
+                gameSelector.dataGame.code
+              }`}
+              size="default"
+            >
+              {gameSelector.countJoined !== 0 &&
+                gameSelector.countAllPlayer === gameSelector.countJoined && (
+                  <Button
+                    type="primary"
+                    onClick={() => setgoToGame(true)}
+                    shape="round"
+                    size="large"
+                    icon={<ArrowRightOutlined />}
+                  >
+                    {t("button.division_role")}
+                  </Button>
+                )}
               <Statistic
-                title="status"
-                value={waitingSelector.countJoined}
-                suffix={" / " + waiting.countAllPlayer}
+                title={t("waiting.status")}
+                value={gameSelector.countJoined}
+                suffix={" / " + gameSelector.countAllPlayer}
               />
               <Space wrap>
                 <Progress
                   type="dashboard"
                   percent={Math.round(
-                    (waitingSelector.countJoined * 100) / waiting.countAllPlayer
+                    (gameSelector.countJoined * 100) /
+                      gameSelector.countAllPlayer
                   )}
                   strokeColor={twoColors}
                 />
@@ -208,18 +145,20 @@ export const WaitingGame = () => {
       </ConfigProvider>
 
       <Row gutter={[8, 8]}>
-        {players.map((m) => (
+        {gameSelector.dataPlayer.map((m) => (
           <Col key={m._id} span={6}>
             <Card title={m.name} bordered={false} size="small">
-              joined👍
+              {t("waiting.joined")}👍
             </Card>
           </Col>
         ))}
-        {waiting.countAllPlayer !== waitingSelector.countJoined && (
+        {(gameSelector.countJoined === 0 ||
+          gameSelector.countAllPlayer !== gameSelector.countJoined) && (
           <Col span={6}>
-            <Card title="Waiting ..." bordered={false} size="small">
-              Waiting for {waiting.countAllPlayer - waitingSelector.countJoined}{" "}
-              more players
+            <Card title={t("waiting.card_title")} bordered={false} size="small">
+              {t("waiting.card_detaile_1")}
+              {gameSelector.countAllPlayer - gameSelector.countJoined}{" "}
+              {t("waiting.card_detaile_2")}
             </Card>
           </Col>
         )}

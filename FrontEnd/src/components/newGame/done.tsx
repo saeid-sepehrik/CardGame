@@ -1,59 +1,51 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { IGame, IRole } from "../../models/models";
+import { IRole } from "../../models/models";
 import { CommentOutlined, GoldTwoTone } from "@ant-design/icons";
 import { Alert, Button, ConfigProvider, Space } from "antd";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../redux/hooks";
-import { setDataGame } from "../game/waitingGame.slice";
-export interface dataProps {
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { setGame } from "../game/game.slice";
+import { appApi } from "../../utility/appApi";
+import { useTranslation } from "react-i18next";
+export interface DoneProps {
+  gameTypeId: string;
   scenario: number;
-  gameTypeName: string;
-  scenarioName: string;
   dataRoleSelected: IRole[];
 }
 
-export const Done = ({
-  scenario,
-  gameTypeName,
-  scenarioName,
-  dataRoleSelected,
-}: dataProps) => {
-  const [dataGameUse, setdataGameUse] = useState<IGame>();
+export const Done = ({ scenario, gameTypeId, dataRoleSelected }: DoneProps) => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [warning, setwarning] = useState(false);
   const [chooseOnline, setchooseOnline] = useState(false);
   const navigate = useNavigate();
+  const gameSelector = useAppSelector((s) => s.game);
   const dispatch = useAppDispatch();
-
+  const { t } = useTranslation();
+  //create game
   useEffect(() => {
-    if (chooseOnline && dataGameUse === undefined) {
+    if (chooseOnline) {
       localStorage.removeItem("idGame");
       (async function () {
         // setLoading(true);
-        const requestOptions = {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            code_scenario: scenario,
-            title_game_type: gameTypeName,
-            title_scenario: scenarioName,
-            status: 1,
-            code: Math.floor(100000 + Math.random() * 900000),
-          }),
+        const code = Math.floor(100000 + Math.random() * 900000);
+        const data = {
+          code_scenario: scenario,
+          id_game_type: gameTypeId,
+          status: 1,
+          code: code,
         };
-        const resp = await fetch(
-          `http://localhost:3000/api/game/`,
-          requestOptions
-        );
-        const json = await resp.json();
-        dispatch(setDataGame(json.data));
-        setdataGameUse(json.data);
+        const resp = await appApi.post("/game/", { data });
+
+        localStorage.setItem("idGame", resp.data.data._id);
+        dispatch(setGame());
       })();
     }
-  }, [chooseOnline, gameTypeName, scenario, scenarioName]);
+  }, [chooseOnline]);
 
+  // create rolegame
   useEffect(() => {
-    if (dataGameUse !== undefined) {
+    if (chooseOnline) {
       (async function () {
         dataRoleSelected.forEach((drs) => {
           (async function () {
@@ -61,27 +53,25 @@ export const Done = ({
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
-                id_game: dataGameUse._id,
+                id_game: gameSelector.dataGame,
                 id_role: drs._id,
+                id_user: "",
                 status: 1,
+                score: 0,
               }),
             };
-            const resp = await fetch(
-              `http://localhost:3000/api/gameRole/`,
-              requestOptions
-            );
-            const json = await resp.json();
+            await fetch(`http://localhost:3000/api/gameRole/`, requestOptions);
           })();
         });
-        localStorage.setItem("idGame", dataGameUse._id);
-        navigate("/waiting");
+
+        navigate("/game");
       })();
     }
-  }, [dataGameUse]);
+  }, [gameSelector.dataGame]);
 
   const countinueOnline = () => {
     if (isOnline) {
-      setchooseOnline(true);
+      setchooseOnline(!chooseOnline);
       // console.log("online");
       setwarning(false);
     } else {
@@ -131,10 +121,10 @@ export const Done = ({
               countinueOnline();
             }}
           >
-            Countinue online
+            {t("button.continue_online")}
           </Button>
           <Button type="default" icon={<GoldTwoTone />} size={"large"}>
-            Countinue Ofline
+            {t("button.continue_ofline")}
           </Button>
         </Space>
       </ConfigProvider>
