@@ -3,7 +3,7 @@ import { appApi } from "../../utility/appApi";
 import { IGame, IGameRole, Iplayer } from "../../models/models";
 
 export interface IGameRoleFull {
-  id: string;
+  _id: string;
   id_game: string;
   id_role: string;
   id_user: string;
@@ -14,6 +14,7 @@ export interface IGameRoleFull {
   title: string;
   group: string;
   user_name: string;
+  edite: boolean;
 }
 
 export interface waitingState {
@@ -53,7 +54,7 @@ const initialState: waitingState = {
   },
   dataRoleGameFull: [
     {
-      id: "",
+      _id: "",
       id_game: "",
       id_role: "",
       id_user: "",
@@ -64,6 +65,7 @@ const initialState: waitingState = {
       title: "",
       group: "",
       score: 0,
+      edite: false,
     },
   ],
   dataPlayer: [],
@@ -162,6 +164,7 @@ const gameSlice = createSlice({
       state.countUpdateedRoleGame += 1;
       if (state.countUpdateedRoleGame === state.countAllPlayer) {
         state.UpdateedRoleGame = true;
+        setRoleGame();
       }
     });
   },

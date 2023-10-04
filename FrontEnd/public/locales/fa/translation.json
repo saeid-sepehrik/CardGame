@@ -6,7 +6,9 @@
     "continue_ofline": "ادامه آفلاین",
     "division_role": "تقسیم نقش ها",
     "next": "بعدی",
-    "killed": "کشته شد"
+    "remove": "حذف",
+    "submit": "ثبت",
+    "cancel": "کنسل"
   },
   "steps": {
     "type": "نوع بازی",

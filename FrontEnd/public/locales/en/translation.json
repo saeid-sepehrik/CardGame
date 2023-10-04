@@ -6,7 +6,9 @@
     "continue_ofline": "Continue ofline ",
     "division_role": "Division of roles",
     "next": "next",
-    "killed": "killed"
+    "remove": "remove",
+    "submit": "Submit",
+    "cancel": "Cancel"
   },
   "steps": {
     "type": "type",
