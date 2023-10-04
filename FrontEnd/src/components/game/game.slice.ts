@@ -31,6 +31,7 @@ export interface waitingState {
   dataGame: IGame;
   dataRoleGameFull: IGameRoleFull[];
   dataPlayer: Iplayer[];
+  CountActivePlayer: number;
 }
 
 const initialState: waitingState = {
@@ -69,6 +70,7 @@ const initialState: waitingState = {
     },
   ],
   dataPlayer: [],
+  CountActivePlayer: 10,
 };
 
 export const updateGame = createAsyncThunk(
@@ -132,6 +134,13 @@ const gameSlice = createSlice({
     setreceivedRoleGame: (state, action) => {
       state.receivedRoleGame = action.payload;
     },
+    setCountActivePlayer: (state) => {
+      let c = 0;
+      state.dataRoleGameFull.map((m) => {
+        if (m.status == 2) c++;
+      });
+      state.CountActivePlayer = c;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(setGame.pending, () => {});
@@ -169,6 +178,10 @@ const gameSlice = createSlice({
     });
   },
 });
-export const { setDataGameRoleFull, setloading, setreceivedRoleGame } =
-  gameSlice.actions;
+export const {
+  setDataGameRoleFull,
+  setloading,
+  setreceivedRoleGame,
+  setCountActivePlayer,
+} = gameSlice.actions;
 export default gameSlice.reducer;

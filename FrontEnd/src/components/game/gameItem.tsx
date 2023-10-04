@@ -1,18 +1,25 @@
-import { Button, List, Rate, Space } from "antd";
+import { Button, FloatButton, List, Rate, Space } from "antd";
 import { StarOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   IGameRoleFull,
+  setCountActivePlayer,
   setDataGameRoleFull,
   updateRoleGame,
 } from "./game.slice";
+import { LogoutOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 export const GameItem = () => {
   const gameSelector = useAppSelector((s) => s.game);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  useEffect(() => {
+    dispatch(setCountActivePlayer());
+  }, []);
 
   const IconText = ({
     icon,
@@ -73,12 +80,12 @@ export const GameItem = () => {
                   dispatch(updateRoleGame(itemtemp));
                   const tempData = gameSelector.dataRoleGameFull.map((obj) => {
                     if (obj._id === item._id) {
-                      return { ...obj, edite: false };
+                      return { ...obj, edite: false, status: 3 };
                     }
                     return obj;
                   });
                   dispatch(setDataGameRoleFull(tempData));
-                  // dispatch(setRoleGame());
+                  dispatch(setCountActivePlayer());
                 }}
               >
                 {t("button.submit")}
@@ -125,10 +132,31 @@ export const GameItem = () => {
           >
             <List.Item.Meta title={item.title} />
             {item.user_name}
+            {item.status === 3 ? (
+              <h3 style={{ color: "red" }}>{t("gameItem.removed")}</h3>
+            ) : (
+              <></>
+            )}
             <br />
           </List.Item>
         )}
       />
+      {gameSelector.CountActivePlayer === 0 && (
+        <FloatButton
+          icon={<LogoutOutlined />}
+          description={t("gameItem.finish_game")}
+          shape="square"
+          style={{ width: 100, right: 200 }}
+          onClick={() => {
+            localStorage.setItem(
+              "idLastGame",
+              localStorage.getItem("idGame") as ""
+            );
+            localStorage.removeItem("idGame");
+            navigate("/");
+          }}
+        />
+      )}
     </>
   );
 };

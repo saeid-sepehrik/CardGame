@@ -25,6 +25,10 @@
     "card_detaile_2": "more players",
     "status": "status"
   },
+  "gameItem": {
+    "removed": "removed",
+    "finish_game": "Finish Game"
+  },
   "config": {
     "direction": "ltr"
   }

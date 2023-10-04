@@ -25,6 +25,10 @@
     "card_detaile_2": "بازیکن دیگر",
     "status": "وضعیت"
   },
+  "gameItem": {
+    "removed": "حذف شده",
+    "finish_game": "پایان بازی"
+  },
   "config": {
     "direction": "rtl"
   }
