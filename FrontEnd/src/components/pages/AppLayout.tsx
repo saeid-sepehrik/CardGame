@@ -9,6 +9,7 @@ import { ProtectedRout } from "./protectedRout";
 import { HeaderComponent } from "./headerComponent";
 import { Game } from "../game/game";
 import { JoinGame } from "../player/joinGame";
+import { PlayerGame } from "../player/playerGame";
 
 const { Header, Content } = Layout;
 
@@ -25,6 +26,7 @@ export const AppLayout = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/game" element={<Game />} />
           <Route path="/joinGame" element={<JoinGame />} />
+          <Route path="/playerGame" element={<PlayerGame />} />
           <Route
             path="/dashbord"
             element={

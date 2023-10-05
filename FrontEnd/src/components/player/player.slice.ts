@@ -4,13 +4,13 @@ import { joinDataType } from "./joinGame";
 import { appApi } from "../../utility/appApi";
 
 export interface player {
-  player: Iplayer;
+  dataPlayer: Iplayer;
   dataGame: IGame;
   incorrectCodeGame: boolean;
 }
 
 const initialState: player = {
-  player: {
+  dataPlayer: {
     _id: "",
     name: "",
     id_game: "",
@@ -35,7 +35,7 @@ export const joinPlayer = createAsyncThunk(
 );
 
 export const getGamewithCode = createAsyncThunk(
-  "game/getGameWithCode",
+  "player/getGameWithCode",
   async (code: number) => {
     const resp = await appApi.get("/game/withCode/" + code);
     return { data: resp.data.data };
@@ -62,7 +62,9 @@ export const playerSlice = createSlice({
     builder.addCase(joinPlayer.pending, () => {});
     builder.addCase(joinPlayer.rejected, () => {});
     builder.addCase(joinPlayer.fulfilled, (state, action) => {
-      console.log(action.payload.data);
+      state.dataPlayer = action.payload.data;
+      localStorage.setItem("idGamePlayer", state.dataGame._id);
+      localStorage.setItem("idPlayer", state.dataPlayer._id);
     });
   },
 });

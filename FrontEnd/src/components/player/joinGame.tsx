@@ -6,6 +6,7 @@ import {
   joinPlayer,
   setIncorrectCodeGame,
 } from "./player.slice";
+import { useNavigate } from "react-router-dom";
 export interface joinFormType {
   name: string;
   code: number;
@@ -18,6 +19,13 @@ export const JoinGame = () => {
   const dispatch = useAppDispatch();
   const playerSelector = useAppSelector((s) => s.player);
   const [name, setName] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("idPlayer") !== null) {
+      navigate("/playerGame");
+    }
+  }, [playerSelector.dataPlayer]);
 
   useEffect(() => {
     if (playerSelector.dataGame.code > 0) {
