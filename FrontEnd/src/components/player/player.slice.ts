@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { IGame, IGameRole, Iplayer } from "../../models/models";
+import { IGame, IGameRole, IRole, Iplayer } from "../../models/models";
 import { joinDataType } from "./joinGame";
 import { appApi } from "../../utility/appApi";
 
@@ -7,6 +7,7 @@ export interface player {
   dataPlayer: Iplayer;
   dataGame: IGame;
   dataRoleGame: IGameRole;
+  dataRole: IRole;
   incorrectCodeGame: boolean;
 }
 
@@ -32,12 +33,31 @@ const initialState: player = {
     status: 1,
     score: 0,
   },
+  dataRole: {
+    _id: "",
+    title: "",
+    title_fn: "",
+    is_active: true,
+    mask_code_scenarios: 0,
+    just_one: true,
+    pic_path: "",
+    dsc: "",
+    group: "",
+    color: "",
+  },
   incorrectCodeGame: false,
 };
 
-export const setRoleGame = createAsyncThunk("game/rolegame", async () => {
+export const setRoleGame = createAsyncThunk("player/rolegame", async () => {
   const resp = await appApi.get(
     "/gameRole/player/" + localStorage.getItem("idPlayer")
+  );
+  return { data: resp.data.data };
+});
+
+export const setRole = createAsyncThunk("player/role", async () => {
+  const resp = await appApi.get(
+    "/role/getById/" + localStorage.getItem("idRolePlayer")
   );
   return { data: resp.data.data };
 });
@@ -92,6 +112,13 @@ export const playerSlice = createSlice({
     builder.addCase(setRoleGame.fulfilled, (state, action) => {
       state.dataRoleGame = action.payload.data[0];
       localStorage.setItem("idRoleGamePlayer", state.dataRoleGame._id);
+      localStorage.setItem("idRolePlayer", state.dataRoleGame.id_role);
+    });
+
+    builder.addCase(setRole.pending, () => {});
+    builder.addCase(setRole.rejected, () => {});
+    builder.addCase(setRole.fulfilled, (state, action) => {
+      state.dataRole = action.payload.data;
     });
   },
 });
