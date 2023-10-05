@@ -17,7 +17,12 @@ export const Home = () => {
         {t("button.create_game")}
       </Button>
 
-      <Button type="primary" shape="round" icon={<LoginOutlined />}>
+      <Button
+        onClick={() => navigate("/joinGame")}
+        type="primary"
+        shape="round"
+        icon={<LoginOutlined />}
+      >
         {t("button.join_game")}
       </Button>
     </>

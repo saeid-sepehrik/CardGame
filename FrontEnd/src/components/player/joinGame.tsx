@@ -1,5 +1,6 @@
 import { Alert, Button, Form, Input, InputNumber } from "antd";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import {
   getGamewithCode,
@@ -20,24 +21,7 @@ export const JoinGame = () => {
   const playerSelector = useAppSelector((s) => s.player);
   const [name, setName] = useState("");
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (localStorage.getItem("idPlayer") !== null) {
-      navigate("/playerGame");
-    }
-  }, [playerSelector.dataPlayer]);
-
-  useEffect(() => {
-    if (playerSelector.dataGame.code > 0) {
-      dispatch(
-        joinPlayer({ name: name, id_game: playerSelector.dataGame._id })
-      );
-    }
-  }, [playerSelector.dataGame]);
-
-  useEffect(() => {
-    if (playerSelector.incorrectCodeGame) console.log("code incorect");
-  }, [playerSelector.incorrectCodeGame]);
+  const { t } = useTranslation();
 
   const onFinish = (values: joinFormType) => {
     dispatch(setIncorrectCodeGame(false));
@@ -49,12 +33,30 @@ export const JoinGame = () => {
     console.log("Failed:", errorInfo);
   };
 
+  useEffect(() => {
+    if (playerSelector.dataGame.code > 0) {
+      dispatch(
+        joinPlayer({ name: name, id_game: playerSelector.dataGame._id })
+      );
+    }
+  }, [playerSelector.dataGame]);
+
+  useEffect(() => {
+    if (localStorage.getItem("idPlayer") !== null) {
+      navigate("/playerGame");
+    }
+  }, [playerSelector.dataPlayer]);
+
+  useEffect(() => {
+    if (playerSelector.incorrectCodeGame) console.log("code incorrect");
+  }, [playerSelector.incorrectCodeGame]);
+
   return (
     <>
       {playerSelector.incorrectCodeGame && (
         <Alert
-          message="code game was not correct"
-          description="Please check your code"
+          message={t("player.alert.wrongCodeGametitle")}
+          description={t("player.alert.wrongCodeGameDescription")}
           type="warning"
           showIcon
           closable
@@ -72,22 +74,22 @@ export const JoinGame = () => {
         onFinishFailed={onFinishFailed}
       >
         <Form.Item<joinFormType>
-          label="player name"
-          rules={[{ required: true, message: "Please input your name!" }]}
+          label={t("player.label.name")}
+          rules={[{ required: true, message: t("player.alert.formNameEmpty") }]}
           name="name"
         >
           <Input />
         </Form.Item>
         <Form.Item<joinFormType>
-          label="code game"
+          label={t("player.label.code_game")}
           name="code"
-          rules={[{ required: true, message: "Please input your code Game" }]}
+          rules={[{ required: true, message: t("player.alert.formCodeEmpty") }]}
         >
           <InputNumber min={100000} max={999999} style={{ width: 300 }} />
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <Button type="primary" htmlType="submit">
-            join
+            {t("button.join")}
           </Button>
         </Form.Item>
       </Form>

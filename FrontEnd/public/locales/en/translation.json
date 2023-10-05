@@ -8,7 +8,8 @@
     "next": "next",
     "remove": "remove",
     "submit": "Submit",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "join": "join"
   },
   "steps": {
     "type": "type",
@@ -28,6 +29,23 @@
   "gameItem": {
     "removed": "removed",
     "finish_game": "Finish Game"
+  },
+  "player": {
+    "alert": {
+      "wrongCodeGametitle": "code game was not correct",
+      "wrongCodeGameDescription": "Please check your code",
+      "formNameEmpty": "Please input your name!",
+      "formCodeEmpty": "Please input code!"
+    },
+    "label": {
+      "name": "name",
+      "code_game": "code"
+    },
+    "carousel": {
+      "message1": "You have successfully entered the game 👍",
+      "message2": "Wait for other players to enter.",
+      "message3": "After that, your card will be shown to you."
+    }
   },
   "config": {
     "direction": "ltr"

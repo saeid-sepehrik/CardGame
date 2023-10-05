@@ -28,6 +28,22 @@ router.get("/:idgame", async (req, res) => {
   });
 });
 
+router.get("/player/:idPlayer", async (req, res) => {
+  const gameRole = await GameRole.find({ id_user: req.params.idPlayer });
+  if (gameRole.length === 0) {
+    res.status(404),
+      res.json({
+        data: null,
+        message: "gameRole not found",
+      });
+  } else {
+    res.json({
+      data: gameRole,
+      message: "OK3",
+    });
+  }
+});
+
 router.post(
   "/",
   [
