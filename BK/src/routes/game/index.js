@@ -19,6 +19,23 @@ router.get("/:id", async (req, res) => {
   });
 });
 
+router.get("/withCode/:code", async (req, res) => {
+  const game = await Game.find({ code: req.params.code });
+  console.log(game);
+  if (game.length === 0) {
+    res.status(404),
+      res.json({
+        data: null,
+        message: "game not found",
+      });
+  } else {
+    res.json({
+      data: game,
+      message: "OK33",
+    });
+  }
+});
+
 router.post(
   "/",
   // [
