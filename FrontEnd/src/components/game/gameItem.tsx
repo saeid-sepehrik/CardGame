@@ -1,18 +1,20 @@
-import { Avatar, Card, FloatButton, Modal, Rate } from "antd";
-import { DeleteOutlined, EllipsisOutlined } from "@ant-design/icons";
+import { Avatar, Card, FloatButton, Rate } from "antd";
+import { DeleteOutlined, MessageOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useEffect, useState } from "react";
-import {
-  IGameRoleFull,
-  setCountActivePlayer,
-  updateRoleGame,
-} from "./game.slice";
+import { IGameRoleFull, setCountActivePlayer } from "./game.slice";
 import { LogoutOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import Meta from "antd/es/card/Meta";
+import { ModalMessage } from "./modalMessage";
+import { ModalRemove } from "./modalRemove";
 
 export const GameItem = () => {
+  const [GameRoleFullModalRemove, setGameRoleFullModalRemove] =
+    useState<IGameRoleFull>();
+  const [GameRoleFullModalMessage, setGameRoleFullModalMessage] =
+    useState<IGameRoleFull>();
   const gameSelector = useAppSelector((s) => s.game);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -21,65 +23,24 @@ export const GameItem = () => {
     dispatch(setCountActivePlayer());
   }, [dispatch, gameSelector.dataRoleGameFull]);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [rateValue, setrateValue] = useState(0);
-  const [GameRoleFullModal, setGameRoleFullModal] = useState<IGameRoleFull>();
+  const showModalMessage = (gameRoleFull: IGameRoleFull) => {
+    setGameRoleFullModalMessage(gameRoleFull);
+  };
 
   const showModalRemove = (gameRoleFull: IGameRoleFull) => {
-    setGameRoleFullModal(gameRoleFull);
-    setIsModalOpen(true);
-  };
-
-  const handleOkModalRemove = () => {
-    if (GameRoleFullModal) {
-      const tempRoleGame = gameSelector.dataRoleGame
-        .filter((f) => f._id === GameRoleFullModal._id)
-        .map((roleGame) => {
-          return {
-            ...roleGame,
-            score: rateValue,
-            status: 3,
-          };
-        });
-      dispatch(
-        updateRoleGame({ data: tempRoleGame[0], updateGameRoleFull: true })
-      );
-      dispatch(setCountActivePlayer());
-    }
-    setIsModalOpen(false);
-  };
-
-  const handleCancelModalRemove = () => {
-    setIsModalOpen(false);
-    setrateValue(0);
+    setGameRoleFullModalRemove(gameRoleFull);
   };
 
   return (
     <>
-      <Modal
-        title={`Are you sure to Remove ${GameRoleFullModal?.user_name}`}
-        open={isModalOpen}
-        onOk={handleOkModalRemove}
-        onCancel={handleCancelModalRemove}
-      >
-        <p>How much do you rate {GameRoleFullModal?.user_name}?</p>
-        <Rate
-          onChange={(value) => {
-            setrateValue(value);
-          }}
-          value={rateValue}
-        />
-      </Modal>
-
-      {/* <Modal
-        title={`mesage to ${GameRoleFullModal?.user_name}`}
-        open={isModalMessageOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <p>Are you sure ?</p>
-      </Modal> */}
-
+      <ModalMessage
+        GameRoleFullModalMessage={GameRoleFullModalMessage}
+        setGameRoleFullModalMessage={setGameRoleFullModalMessage}
+      />
+      <ModalRemove
+        GameRoleFullModalRemove={GameRoleFullModalRemove}
+        setGameRoleFullModalRemove={setGameRoleFullModalRemove}
+      />
       {gameSelector.dataRoleGameFull.map((m) => (
         <Card
           key={m._id}
@@ -102,8 +63,11 @@ export const GameItem = () => {
                 <Rate disabled defaultValue={m.score} />
               </span>
             ),
-
-            <EllipsisOutlined key="ellipsis" />,
+            <MessageOutlined
+              width={20}
+              key="ellipsis"
+              onClick={() => showModalMessage(m)}
+            />,
           ]}
         >
           <Meta

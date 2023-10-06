@@ -54,3 +54,11 @@ export interface Iplayer {
   name: string;
   id_game: string;
 }
+
+export interface IMessage {
+  _id?: string;
+  id_game: string;
+  id_player: string;
+  text: string;
+  action: string;
+}

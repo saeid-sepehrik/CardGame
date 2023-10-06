@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { appApi } from "../../utility/appApi";
-import { IGame, IGameRole, Iplayer } from "../../models/models";
+import { IGame, IGameRole, IMessage, Iplayer } from "../../models/models";
 
 export interface IGameRoleFull {
   _id: string;
@@ -30,6 +30,7 @@ export interface waitingState {
   countJoined: number;
   codeGame: number;
   dataRoleGame: IGameRole[];
+  dataMessages: IMessage[];
   dataGame: IGame;
   dataRoleGameFull: IGameRoleFull[];
   dataPlayer: Iplayer[];
@@ -48,6 +49,7 @@ const initialState: waitingState = {
   countJoined: 0,
   codeGame: 0,
   dataRoleGame: [],
+  dataMessages: [],
   dataGame: {
     _id: "",
     code_scenario: 0,
@@ -95,10 +97,26 @@ export const updateRoleGame = createAsyncThunk(
   }
 );
 
+export const sendNewMessage = createAsyncThunk(
+  "game/sendNewMessage",
+  async (data: IMessage) => {
+    const resp = await appApi.post("/message/", data);
+    return { data: resp.data.data };
+  }
+);
+
 export const setRoleGame = createAsyncThunk("game/rolegame", async () => {
   const resp = await appApi.get("/gameRole/" + localStorage.getItem("idGame"));
   return { data: resp.data.data };
 });
+
+export const setDataMessagesPlayer = createAsyncThunk(
+  "game/setMessagesPlayer",
+  async (id: string) => {
+    const resp = await appApi.get("/message/player/" + id);
+    return { data: resp.data.data };
+  }
+);
 
 export const setAlluser = createAsyncThunk("game/alluser", async () => {
   const resp = await appApi.get("/gameRole/" + localStorage.getItem("idGame"));
@@ -179,6 +197,14 @@ const gameSlice = createSlice({
       if (action.payload.updateGameRoleFull) {
         state.receivedRoleGame = false;
       }
+    });
+    builder.addCase(sendNewMessage.fulfilled, () => {});
+    builder.addCase(setDataMessagesPlayer.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(setDataMessagesPlayer.fulfilled, (state, action) => {
+      state.dataMessages = action.payload.data;
+      state.loading = false;
     });
   },
 });
