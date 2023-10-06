@@ -10,7 +10,7 @@ import {
   setRoleGame,
   updateRoleGame,
 } from "./player.slice";
-import { Card, Slider, Switch, notification } from "antd";
+import { Card, Slider, Switch, notification, Rate } from "antd";
 import { MessageOutlined, SmileOutlined } from "@ant-design/icons";
 import Meta from "antd/es/card/Meta";
 import i18n from "../../i18n";
@@ -123,11 +123,17 @@ export const HoldGamePlayer = () => {
             )}
             {playerSelector.countUnreadMessage > 0 && <>new Message🟢</>}
           </div>,
-          <>{playerSelector.dataRoleGame.score}⭐</>,
           <>
-            {playerSelector.dataRoleGame.status === 2
-              ? "live 🟢"
-              : "removed 🔴"}
+            {playerSelector.dataRoleGame.status === 2 && (
+              <>
+                {playerSelector.dataRoleGame.status === 2
+                  ? "live 🟢"
+                  : "removed 🔴"}
+              </>
+            )}
+            {playerSelector.dataRoleGame.status === 3 && (
+              <Rate disabled defaultValue={playerSelector.dataRoleGame.score} />
+            )}
           </>,
         ]}
       >
