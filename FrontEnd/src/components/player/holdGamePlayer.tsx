@@ -10,8 +10,8 @@ import {
   setRoleGame,
   updateRoleGame,
 } from "./player.slice";
-import { Card, Slider, Switch } from "antd";
-import { MessageOutlined } from "@ant-design/icons";
+import { Card, Slider, Switch, notification } from "antd";
+import { MessageOutlined, SmileOutlined } from "@ant-design/icons";
 import Meta from "antd/es/card/Meta";
 import i18n from "../../i18n";
 import { Message } from "./message";
@@ -28,6 +28,20 @@ export const HoldGamePlayer = () => {
     setDisabled(checked);
     setopacity(0);
   };
+
+  const [api, contextHolder] = notification.useNotification();
+  const openNotification = (title: string, description: string) => {
+    api.open({
+      message: title,
+      description: description,
+      icon: <SmileOutlined style={{ color: "#108ee9" }} />,
+    });
+  };
+
+  useEffect(() => {
+    if (playerSelector.dataRoleGame.newMessage === true)
+      openNotification("new message", "you have a new message");
+  }, [playerSelector.dataRoleGame.newMessage]);
 
   useEffect(() => {
     if (
@@ -72,6 +86,7 @@ export const HoldGamePlayer = () => {
 
   return (
     <>
+      {contextHolder}
       <Message
         openModalMessage={openModalMessage}
         setopenModalMessage={setopenModalMessage}
