@@ -63,6 +63,7 @@ export const ModalMessage = ({
         id_game: GameRoleFullModalMessage._id,
         id_player: GameRoleFullModalMessage.id_user,
         text: textMessage,
+        read: false,
         action: "CheckCircleOutlined",
       };
       dispatch(sendNewMessage(newMessage));

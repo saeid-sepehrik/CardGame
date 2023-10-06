@@ -66,4 +66,19 @@ router.post(
   }
 );
 
+router.put("/:id", async (req, res) => {
+  const filter = { _id: req.params.id };
+  const updateDoc = {
+    $set: {
+      read: req.body.read,
+      action: req.body.action,
+    },
+  };
+  const message = await Message.updateOne(filter, updateDoc);
+  res.json({
+    data: message,
+    message: "update message",
+  });
+});
+
 module.exports = router;

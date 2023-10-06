@@ -26,6 +26,21 @@ router.get("/joinGame/:id", async (req, res) => {
   });
 });
 
+router.get("/:id", async (req, res) => {
+  const player = await playerModel.findOne({ _id: req.params.id });
+  if (!player) {
+    res.status(404),
+      res.json({
+        data: null,
+        message: "player not found",
+      });
+  }
+  res.json({
+    data: player,
+    message: "OK333",
+  });
+});
+
 router.post(
   "/",
   [

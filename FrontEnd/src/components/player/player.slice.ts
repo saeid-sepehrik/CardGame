@@ -1,5 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { IGame, IGameRole, IRole, Iplayer } from "../../models/models";
+import {
+  IGame,
+  IGameRole,
+  IMessage,
+  IRole,
+  Iplayer,
+} from "../../models/models";
 import { joinDataType } from "./joinGame";
 import { appApi } from "../../utility/appApi";
 
@@ -8,6 +14,8 @@ export interface player {
   dataGame: IGame;
   dataRoleGame: IGameRole;
   dataRole: IRole;
+  dataMessages: IMessage[];
+  countUnreadMessage: number;
   incorrectCodeGame: boolean;
 }
 
@@ -32,6 +40,7 @@ const initialState: player = {
     id_user: "",
     status: 1,
     score: 0,
+    newMessage: false,
   },
   dataRole: {
     _id: "",
@@ -45,7 +54,9 @@ const initialState: player = {
     group: "",
     color: "",
   },
+  dataMessages: [],
   incorrectCodeGame: false,
+  countUnreadMessage: 0,
 };
 
 export const setRoleGame = createAsyncThunk("player/rolegame", async () => {
@@ -54,6 +65,35 @@ export const setRoleGame = createAsyncThunk("player/rolegame", async () => {
   );
   return { data: resp.data.data };
 });
+
+export const setMessages = createAsyncThunk("player/message", async () => {
+  const resp = await appApi.get(
+    "/message/player/" + localStorage.getItem("idPlayer")
+  );
+  return { data: resp.data.data };
+});
+
+export const setPlayer = createAsyncThunk("player/player", async () => {
+  const resp = await appApi.get("/player/" + localStorage.getItem("idPlayer"));
+  return { data: resp.data.data };
+});
+
+export const updateRoleGame = createAsyncThunk(
+  "player/updateRoleGame",
+  async (data: IGameRole) => {
+    console.log(data);
+    await appApi.put("/gameRole/" + data._id, { data });
+    return {};
+  }
+);
+
+export const updateMessage = createAsyncThunk(
+  "player/updateMessage",
+  async (data: IMessage) => {
+    await appApi.put("/message/" + data._id, data);
+    return {};
+  }
+);
 
 export const setRole = createAsyncThunk("player/role", async () => {
   const resp = await appApi.get(
@@ -113,12 +153,43 @@ export const playerSlice = createSlice({
       state.dataRoleGame = action.payload.data[0];
       localStorage.setItem("idRoleGamePlayer", state.dataRoleGame._id);
       localStorage.setItem("idRolePlayer", state.dataRoleGame.id_role);
+      if (state.dataRoleGame.newMessage)
+        state.countUnreadMessage = state.dataMessages.filter(
+          (f) => f.read === false
+        ).length;
     });
 
     builder.addCase(setRole.pending, () => {});
     builder.addCase(setRole.rejected, () => {});
     builder.addCase(setRole.fulfilled, (state, action) => {
       state.dataRole = action.payload.data;
+    });
+
+    builder.addCase(setPlayer.pending, () => {});
+    builder.addCase(setPlayer.rejected, () => {});
+    builder.addCase(setPlayer.fulfilled, (state, action) => {
+      state.dataPlayer = action.payload.data;
+    });
+
+    builder.addCase(setMessages.pending, () => {});
+    builder.addCase(setMessages.rejected, () => {});
+    builder.addCase(setMessages.fulfilled, (state, action) => {
+      state.dataMessages = action.payload.data;
+      state.countUnreadMessage = state.dataMessages.filter(
+        (f) => f.read === false
+      ).length;
+    });
+
+    builder.addCase(updateMessage.pending, () => {});
+    builder.addCase(updateMessage.rejected, () => {});
+    builder.addCase(updateMessage.fulfilled, (state, action) => {
+      const index = state.dataMessages.findIndex(function (wizard) {
+        return wizard._id === action.meta.arg._id;
+      });
+      state.dataMessages[index] = action.meta.arg;
+      state.countUnreadMessage = state.dataMessages.filter(
+        (f) => f.read === false
+      ).length;
     });
   },
 });

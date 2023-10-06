@@ -1,17 +1,25 @@
-import React, { useState } from "react";
-
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { setRole, setRoleGame } from "./player.slice";
+import {
+  setMessages,
+  setPlayer,
+  setRole,
+  setRoleGame,
+  updateRoleGame,
+} from "./player.slice";
 import { Card, Slider, Switch } from "antd";
 import { MessageOutlined } from "@ant-design/icons";
 import Meta from "antd/es/card/Meta";
 import i18n from "../../i18n";
+import { Message } from "./message";
 
 export const HoldGamePlayer = () => {
   const [opacity, setopacity] = useState(0);
   const [disabled, setDisabled] = useState(false);
+  const [openModalMessage, setopenModalMessage] = useState(false);
   const { t } = useTranslation();
   const playerSelector = useAppSelector((s) => s.player);
   const dispatch = useAppDispatch();
@@ -22,15 +30,52 @@ export const HoldGamePlayer = () => {
   };
 
   useEffect(() => {
+    if (
+      playerSelector.countUnreadMessage === 0 &&
+      playerSelector.dataRoleGame.newMessage === true
+    ) {
+      console.log("dsdasd");
+      dispatch(
+        updateRoleGame({ ...playerSelector.dataRoleGame, newMessage: false })
+      );
+    }
+  }, [playerSelector.countUnreadMessage]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      (async function () {
+        dispatch(setRoleGame());
+      })();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const showModalMessage = () => {
+    setopenModalMessage(true);
+  };
+
+  useEffect(() => {
     dispatch(setRole());
+  }, []);
+
+  useEffect(() => {
+    dispatch(setPlayer());
   }, []);
 
   useEffect(() => {
     dispatch(setRoleGame());
   }, []);
 
+  useEffect(() => {
+    dispatch(setMessages());
+  }, [playerSelector.dataRoleGame.newMessage]);
+
   return (
     <>
+      <Message
+        openModalMessage={openModalMessage}
+        setopenModalMessage={setopenModalMessage}
+      />
       <Slider
         step={0.01}
         min={0}
@@ -54,10 +99,15 @@ export const HoldGamePlayer = () => {
           />
         }
         actions={[
-          <MessageOutlined
-            onClick={() => console.log("sdsds")}
-            key="ellipsis"
-          />,
+          <div onClick={() => showModalMessage()}>
+            {playerSelector.countUnreadMessage === 0 && (
+              <MessageOutlined
+                onClick={() => showModalMessage()}
+                key="ellipsis"
+              />
+            )}
+            {playerSelector.countUnreadMessage > 0 && <>new Message🟢</>}
+          </div>,
           <>{playerSelector.dataRoleGame.score}⭐</>,
           <>
             {playerSelector.dataRoleGame.status === 2

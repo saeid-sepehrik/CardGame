@@ -83,6 +83,7 @@ router.put("/:id", async (req, res) => {
       status: req.body.data.status,
       id_user: req.body.data.id_user,
       score: req.body.data.score,
+      newMessage: req.body.data.newMessage,
     },
   };
   const roleGame = await GameRole.updateOne(filter, updateDoc);

@@ -61,4 +61,5 @@ export interface IMessage {
   id_player: string;
   text: string;
   action: string;
+  read: boolean;
 }
