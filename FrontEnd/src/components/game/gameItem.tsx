@@ -1,16 +1,16 @@
-import { Button, FloatButton, List, Rate, Space } from "antd";
-import { StarOutlined } from "@ant-design/icons";
+import { Avatar, Card, FloatButton, Modal, Rate } from "antd";
+import { DeleteOutlined, EllipsisOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   IGameRoleFull,
   setCountActivePlayer,
-  setDataGameRoleFull,
   updateRoleGame,
 } from "./game.slice";
 import { LogoutOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import Meta from "antd/es/card/Meta";
 
 export const GameItem = () => {
   const gameSelector = useAppSelector((s) => s.game);
@@ -19,128 +19,101 @@ export const GameItem = () => {
   const navigate = useNavigate();
   useEffect(() => {
     dispatch(setCountActivePlayer());
-  }, []);
+  }, [dispatch, gameSelector.dataRoleGameFull]);
 
-  const IconText = ({
-    icon,
-    text,
-    item,
-  }: {
-    icon: React.FC;
-    text: string;
-    item: IGameRoleFull;
-  }) => (
-    <Space>
-      {item !== undefined && (
-        <>
-          {item.status === 2 && item.edite === false && (
-            <Button
-              danger
-              type="primary"
-              onClick={() => {
-                const tempData = gameSelector.dataRoleGameFull.map((obj) => {
-                  if (obj._id === item._id) {
-                    return { ...obj, edite: true };
-                  }
-                  return obj;
-                });
-                dispatch(setDataGameRoleFull(tempData));
-              }}
-            >
-              {t("button.remove")}
-            </Button>
-          )}
-          {item.edite === true && (
-            <Button
-              type="primary"
-              onClick={() => {
-                const tempData = gameSelector.dataRoleGameFull.map((obj) => {
-                  if (obj._id === item._id) {
-                    return { ...obj, edite: false, status: 2 };
-                  }
-                  return obj;
-                });
-                dispatch(setDataGameRoleFull(tempData));
-              }}
-            >
-              {t("button.cancel")}
-            </Button>
-          )}
-          {item.edite === true && (
-            <>
-              <Button
-                type="primary"
-                danger
-                onClick={() => {
-                  console.log(item.user_name);
-                  // const itemrole:IGameRole = gameSelector.dataRoleGameFull.filter(f=>f._id = item._id)[0];
-                  const itemtemp = gameSelector.dataRoleGameFull.filter(
-                    (f) => f._id === item._id
-                  )[0];
-                  dispatch(updateRoleGame(itemtemp));
-                  const tempData = gameSelector.dataRoleGameFull.map((obj) => {
-                    if (obj._id === item._id) {
-                      return { ...obj, edite: false, status: 3 };
-                    }
-                    return obj;
-                  });
-                  dispatch(setDataGameRoleFull(tempData));
-                  dispatch(setCountActivePlayer());
-                }}
-              >
-                {t("button.submit")}
-              </Button>
-              <Rate
-                onChange={(value) => {
-                  const tempData = gameSelector.dataRoleGameFull.map((obj) => {
-                    if (obj._id === item._id) {
-                      return { ...obj, score: value, status: 3 };
-                    }
-                    return obj;
-                  });
-                  dispatch(setDataGameRoleFull(tempData));
-                }}
-                value={item.score}
-              />
-            </>
-          )}
-        </>
-      )}
-      {React.createElement(icon)}
-      {text}
-    </Space>
-  );
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [rateValue, setrateValue] = useState(0);
+  const [GameRoleFullModal, setGameRoleFullModal] = useState<IGameRoleFull>();
+
+  const showModalRemove = (gameRoleFull: IGameRoleFull) => {
+    setGameRoleFullModal(gameRoleFull);
+    setIsModalOpen(true);
+  };
+
+  const handleOkModalRemove = () => {
+    if (GameRoleFullModal) {
+      const tempRoleGame = gameSelector.dataRoleGame
+        .filter((f) => f._id === GameRoleFullModal._id)
+        .map((roleGame) => {
+          return {
+            ...roleGame,
+            score: rateValue,
+            status: 3,
+          };
+        });
+      dispatch(
+        updateRoleGame({ data: tempRoleGame[0], updateGameRoleFull: true })
+      );
+      dispatch(setCountActivePlayer());
+    }
+    setIsModalOpen(false);
+  };
+
+  const handleCancelModalRemove = () => {
+    setIsModalOpen(false);
+    setrateValue(0);
+  };
 
   return (
     <>
-      <List
-        itemLayout="vertical"
-        size="large"
-        dataSource={gameSelector.dataRoleGameFull}
-        renderItem={(item) => (
-          <List.Item
-            key={item.title}
-            actions={[
-              <IconText
-                icon={StarOutlined}
-                text={item.score.toString(10)}
-                key="list-vertical-star-o"
-                item={item}
-              />,
-            ]}
-            extra={<img width={100} alt="logo" src={"../" + item.pic_path} />}
-          >
-            <List.Item.Meta title={item.title} />
-            {item.user_name}
-            {item.status === 3 ? (
-              <h3 style={{ color: "red" }}>{t("gameItem.removed")}</h3>
-            ) : (
-              <></>
-            )}
-            <br />
-          </List.Item>
-        )}
-      />
+      <Modal
+        title={`Are you sure to Remove ${GameRoleFullModal?.user_name}`}
+        open={isModalOpen}
+        onOk={handleOkModalRemove}
+        onCancel={handleCancelModalRemove}
+      >
+        <p>How much do you rate {GameRoleFullModal?.user_name}?</p>
+        <Rate
+          onChange={(value) => {
+            setrateValue(value);
+          }}
+          value={rateValue}
+        />
+      </Modal>
+
+      {/* <Modal
+        title={`mesage to ${GameRoleFullModal?.user_name}`}
+        open={isModalMessageOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <p>Are you sure ?</p>
+      </Modal> */}
+
+      {gameSelector.dataRoleGameFull.map((m) => (
+        <Card
+          key={m._id}
+          style={{
+            width: `100%`,
+            marginBottom: 7,
+            backgroundColor: `${m.status === 3 ? "#772424" : ""}`,
+          }}
+          actions={[
+            (m.status !== 3 && (
+              <DeleteOutlined
+                key="setting"
+                onClick={() => showModalRemove(m)}
+              />
+            )) || (
+              <span
+                key="edit"
+                style={{ display: m.status !== 3 ? "none" : "" }}
+              >
+                <Rate disabled defaultValue={m.score} />
+              </span>
+            ),
+
+            <EllipsisOutlined key="ellipsis" />,
+          ]}
+        >
+          <Meta
+            avatar={<Avatar src={m.pic_path} />}
+            title={m.user_name}
+            description={m.title}
+          />
+        </Card>
+      ))}
+
       {gameSelector.CountActivePlayer === 0 && (
         <FloatButton
           icon={<LogoutOutlined />}

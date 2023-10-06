@@ -37,6 +37,7 @@ export interface IGameRole {
   id_user: string;
   status: number;
   score: number;
+  newMessage: boolean;
 }
 
 export interface IGame {

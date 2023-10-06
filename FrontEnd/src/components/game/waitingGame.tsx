@@ -62,7 +62,9 @@ export const WaitingGame = () => {
               id_user: id_player_shufle[index],
               status: 2,
             };
-            dispatch(updateRoleGame(new_obj));
+            dispatch(
+              updateRoleGame({ data: new_obj, updateGameRoleFull: false })
+            );
           });
       })();
     }

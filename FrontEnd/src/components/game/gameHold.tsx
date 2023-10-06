@@ -58,13 +58,14 @@ export const GameHold = () => {
         ],
         user_name: player.filter((f) => f._id === m.id_user)[0].name,
         edite: false,
+        newMessage: false,
       }));
       // console.log(atemp);
       dispatch(setDataGameRoleFull(atemp));
       dispatch(setloading(false));
     }
   }, [
-    // gameSelector.countUpdateedRoleGame,
+    gameSelector.ReadyForGetDataRoleGameFull,
     roleSelector.receivedRole,
     gameSelector.receivedPlayer,
     gameSelector.receivedRoleGame,

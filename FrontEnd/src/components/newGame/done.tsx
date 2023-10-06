@@ -58,6 +58,7 @@ export const Done = ({ scenario, gameTypeId, dataRoleSelected }: DoneProps) => {
                 id_user: "",
                 status: 1,
                 score: 0,
+                newMessage: false,
               }),
             };
             await fetch(`http://localhost:3000/api/gameRole/`, requestOptions);

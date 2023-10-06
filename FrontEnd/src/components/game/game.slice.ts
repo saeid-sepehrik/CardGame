@@ -15,6 +15,7 @@ export interface IGameRoleFull {
   group: string;
   user_name: string;
   edite: boolean;
+  newMessage: boolean;
 }
 
 export interface waitingState {
@@ -23,6 +24,7 @@ export interface waitingState {
   receivedPlayer: boolean;
   countUpdateedRoleGame: number;
   UpdateedRoleGame: boolean;
+  ReadyForGetDataRoleGameFull: boolean;
   loading: boolean;
   countAllPlayer: number;
   countJoined: number;
@@ -40,6 +42,7 @@ const initialState: waitingState = {
   receivedPlayer: false,
   countUpdateedRoleGame: 0,
   UpdateedRoleGame: false,
+  ReadyForGetDataRoleGameFull: false,
   loading: true,
   countAllPlayer: 0,
   countJoined: 0,
@@ -67,6 +70,7 @@ const initialState: waitingState = {
       group: "",
       score: 0,
       edite: false,
+      newMessage: false,
     },
   ],
   dataPlayer: [],
@@ -85,11 +89,9 @@ export const updateGame = createAsyncThunk(
 
 export const updateRoleGame = createAsyncThunk(
   "game/updateRoleGame",
-  async (data: IGameRole) => {
-    await appApi.put("/gameRole/" + data._id, {
-      data,
-    });
-    // return { data: resp.data.data };
+  async (data: { data: IGameRole; updateGameRoleFull?: boolean }) => {
+    await appApi.put("/gameRole/" + data.data._id, data);
+    return { updateGameRoleFull: data.updateGameRoleFull };
   }
 );
 
@@ -169,11 +171,13 @@ const gameSlice = createSlice({
     builder.addCase(updateGame.fulfilled, (state, action) => {
       state.dataGame = action.payload.data;
     });
-    builder.addCase(updateRoleGame.fulfilled, (state) => {
+    builder.addCase(updateRoleGame.fulfilled, (state, action) => {
       state.countUpdateedRoleGame += 1;
       if (state.countUpdateedRoleGame === state.countAllPlayer) {
         state.UpdateedRoleGame = true;
-        setRoleGame();
+      }
+      if (action.payload.updateGameRoleFull) {
+        state.receivedRoleGame = false;
       }
     });
   },
