@@ -14,6 +14,7 @@ import { Card, Slider, Switch, notification, Rate } from "antd";
 import { MessageOutlined, SmileOutlined } from "@ant-design/icons";
 import Meta from "antd/es/card/Meta";
 import i18n from "../../i18n";
+import type { NotificationPlacement } from "antd/es/notification/interface";
 import { Message } from "./message";
 
 export const HoldGamePlayer = () => {
@@ -30,25 +31,35 @@ export const HoldGamePlayer = () => {
   };
 
   const [api, contextHolder] = notification.useNotification();
-  const openNotification = (title: string, description: string) => {
+  const openNotification = (
+    placement: NotificationPlacement,
+    title: string,
+    description: string
+  ) => {
     api.open({
       message: title,
       description: description,
       icon: <SmileOutlined style={{ color: "#108ee9" }} />,
+      placement,
+      duration: 0,
     });
   };
 
   useEffect(() => {
     if (playerSelector.dataRoleGame.newMessage === true)
-      openNotification("new message", "you have a new message");
+      openNotification("bottomRight", "new message", "you have a new message");
   }, [playerSelector.dataRoleGame.newMessage]);
+
+  useEffect(() => {
+    if (playerSelector.dataRoleGame.status === 3)
+      openNotification("bottomRight", "romoved game", "you remove from game.");
+  }, [playerSelector.dataRoleGame.status]);
 
   useEffect(() => {
     if (
       playerSelector.countUnreadMessage === 0 &&
       playerSelector.dataRoleGame.newMessage === true
     ) {
-      console.log("dsdasd");
       dispatch(
         updateRoleGame({ ...playerSelector.dataRoleGame, newMessage: false })
       );
