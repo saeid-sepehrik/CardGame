@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { DislikeOutlined, LikeOutlined } from "@ant-design/icons";
 import { setMessages, updateMessage } from "./player.slice";
 import { IMessage } from "../../models/models";
+import { useTranslation } from "react-i18next";
 
 export interface MessageProps {
   openModalMessage: boolean;
@@ -15,6 +16,7 @@ export const Message = ({
 }: MessageProps) => {
   const dispatch = useAppDispatch();
   const playerSelector = useAppSelector((s) => s.player);
+  const { t } = useTranslation();
 
   const loadMoreData = () => {
     // if (playerSelector.loading) {
@@ -42,6 +44,11 @@ export const Message = ({
         open={openModalMessage}
         onOk={handleOkModalMessage}
         onCancel={handleCancelModalMessage}
+        footer={[
+          <Button key="close" onClick={handleCancelModalMessage}>
+            {t("button.close")}
+          </Button>,
+        ]}
       >
         <div
           id="scrollableDiv"
@@ -57,7 +64,9 @@ export const Message = ({
             next={loadMoreData}
             hasMore={playerSelector.dataMessages.length > 10}
             loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
-            endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
+            endMessage={
+              <Divider plain>{t("common.label.notMoreMessage")}</Divider>
+            }
             scrollableTarget="scrollableDiv"
           >
             <List

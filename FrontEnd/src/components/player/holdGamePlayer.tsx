@@ -49,12 +49,20 @@ export const HoldGamePlayer = () => {
 
   useEffect(() => {
     if (playerSelector.dataRoleGame.newMessage === true)
-      openNotification("bottomRight", "new message", "you have a new message");
+      openNotification(
+        "bottomRight",
+        t("player.label.newMessage"),
+        t("player.label.newMessageNotofication")
+      );
   }, [playerSelector.dataRoleGame.newMessage]);
 
   useEffect(() => {
     if (playerSelector.dataRoleGame.status === 3)
-      openNotification("bottomRight", "romoved game", "you remove from game.");
+      openNotification(
+        "bottomRight",
+        t("player.label.removeGame"),
+        t("player.label.newMessageRemovePlayer")
+      );
   }, [playerSelector.dataRoleGame.status]);
 
   useEffect(() => {
@@ -119,7 +127,8 @@ export const HoldGamePlayer = () => {
         disabled={disabled}
         onChange={setopacity}
       />
-      Disabled: <Switch size="small" checked={disabled} onChange={onChange} />
+      {t("player.label.disable")}
+      <Switch size="small" checked={disabled} onChange={onChange} />
       <Card
         cover={
           <img
@@ -141,14 +150,16 @@ export const HoldGamePlayer = () => {
                 key="ellipsis"
               />
             )}
-            {playerSelector.countUnreadMessage > 0 && <>new Message🟢</>}
+            {playerSelector.countUnreadMessage > 0 && (
+              <>{t("player.label.newMessage")}🟢</>
+            )}
           </div>,
           <>
             {playerSelector.dataRoleGame.status === 2 && (
               <>
                 {playerSelector.dataRoleGame.status === 2
-                  ? "live 🟢"
-                  : "removed 🔴"}
+                  ? `${t("player.label.active")} 🟢`
+                  : `${t("player.label.removed")} 🔴`}
               </>
             )}
             {playerSelector.dataRoleGame.status === 3 && (

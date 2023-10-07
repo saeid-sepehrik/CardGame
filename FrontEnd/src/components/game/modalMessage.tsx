@@ -1,8 +1,9 @@
-import { Divider, List, Modal, Skeleton } from "antd";
+import { Button, Divider, List, Modal, Skeleton } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { useTranslation } from "react-i18next";
 import {
   IGameRoleFull,
   sendNewMessage,
@@ -28,6 +29,7 @@ export const ModalMessage = ({
 }: ModalMessageProps) => {
   const [isModalMessageOpen, setIsModalMessageOpen] = useState(false);
   const [textMessage, settextMessage] = useState("");
+  const { t } = useTranslation();
 
   const dispatch = useAppDispatch();
   const gameSelector = useAppSelector((s) => s.game);
@@ -87,10 +89,25 @@ export const ModalMessage = ({
   return (
     <>
       <Modal
-        title={`mesage to ${GameRoleFullModalMessage?.user_name}`}
+        title={`${t("gameItem.messageTo")} ${
+          GameRoleFullModalMessage?.user_name
+        }`}
         open={isModalMessageOpen}
         onOk={handleOkModalMessage}
         onCancel={handleCancelModalMessage}
+        footer={[
+          <Button key="back" onClick={handleCancelModalMessage}>
+            {t("button.cancel")}
+          </Button>,
+          <Button
+            key="submit"
+            style={{ backgroundColor: "green" }}
+            type="primary"
+            onClick={handleOkModalMessage}
+          >
+            {t("button.send")}
+          </Button>,
+        ]}
       >
         <div
           id="scrollableDiv"
@@ -106,17 +123,16 @@ export const ModalMessage = ({
             next={loadMoreData}
             hasMore={gameSelector.dataMessages.length > 10}
             loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
-            endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
+            endMessage={
+              <Divider plain>{t("common.label.notMoreMessage")}</Divider>
+            }
             scrollableTarget="scrollableDiv"
           >
             <List
               dataSource={gameSelector.dataMessages}
               renderItem={(item) => (
                 <List.Item key={item.text}>
-                  <List.Item.Meta
-                    // avatar={<Avatar src={item.picture.large} />}
-                    title={<a href="https://ant.design">{item.text}</a>}
-                  />
+                  <List.Item.Meta title={item.text} />
                   {item.action === "CheckCircleOutlined" && (
                     <CheckCircleOutlined style={{ color: "yellowgreen" }} />
                   )}
@@ -134,7 +150,7 @@ export const ModalMessage = ({
         <TextArea
           onChange={(e) => settextMessage(e.target.value)}
           rows={4}
-          placeholder="maxLength is 100"
+          placeholder={t("gameItem.maxLenghtText")}
           maxLength={100}
           defaultValue={""}
         />

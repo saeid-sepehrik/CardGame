@@ -9,7 +9,6 @@ export const HeaderComponent = () => {
   const { i18n } = useTranslation();
 
   const onChange = (value?: string) => {
-    console.log(`selected ${value}`);
     i18n.changeLanguage(value);
   };
 
@@ -19,7 +18,7 @@ export const HeaderComponent = () => {
         showSearch
         optionFilterProp="children"
         onChange={onChange}
-        defaultValue={"en"}
+        defaultValue={i18n.language}
         options={[
           {
             value: "en",

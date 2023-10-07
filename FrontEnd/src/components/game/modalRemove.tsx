@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 import {
   IGameRoleFull,
   setCountActivePlayer,
+  setRoleGame,
   updateRoleGame,
 } from "./game.slice";
-import { Modal, Rate } from "antd";
+import { Button, Modal, Rate } from "antd";
+import { useTranslation } from "react-i18next";
 
 export interface ModalRemoveProps {
   GameRoleFullModalRemove?: IGameRoleFull;
@@ -20,6 +22,7 @@ export const ModalRemove = ({
   const [rateValue, setrateValue] = useState(0);
   const dispatch = useAppDispatch();
   const gameSelector = useAppSelector((s) => s.game);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (GameRoleFullModalRemove !== undefined) {
@@ -36,6 +39,7 @@ export const ModalRemove = ({
             ...roleGame,
             score: rateValue,
             status: 3,
+            newMessage: false,
           };
         });
       dispatch(
@@ -56,12 +60,26 @@ export const ModalRemove = ({
   return (
     <>
       <Modal
-        title={`Are you sure to Remove ${GameRoleFullModalRemove?.user_name}`}
+        title={t("gameItem.confirmRemoveUSer")}
         open={isModalRemoveOpen}
         onOk={handleOkModalRemove}
         onCancel={handleCancelModalRemove}
+        footer={[
+          <Button key="back" onClick={handleCancelModalRemove}>
+            {t("button.cancel")}
+          </Button>,
+          <Button
+            key="submit"
+            style={{ backgroundColor: "green" }}
+            type="primary"
+            onClick={handleOkModalRemove}
+          >
+            {t("button.submit")}
+          </Button>,
+        ]}
       >
-        <p>How much do you rate {GameRoleFullModalRemove?.user_name}?</p>
+        <p>{GameRoleFullModalRemove?.user_name}</p>
+        <p>{t("gameItem.rateUSer")}</p>
         <Rate
           onChange={(value) => {
             setrateValue(value);
