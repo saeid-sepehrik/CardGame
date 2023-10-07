@@ -2,7 +2,11 @@ import { Avatar, Card, FloatButton, Rate } from "antd";
 import { DeleteOutlined, MessageOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useEffect, useState } from "react";
-import { IGameRoleFull, setCountActivePlayer } from "./game.slice";
+import {
+  IGameRoleFull,
+  setCountActivePlayer,
+  updateRoleGame,
+} from "./game.slice";
 import { LogoutOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -91,6 +95,13 @@ export const GameItem = () => {
             );
             localStorage.removeItem("idGame");
             navigate("/");
+            gameSelector.dataRoleGame.map((m) => {
+              const temp = {
+                ...m,
+                status: 4,
+              };
+              updateRoleGame({ data: temp, updateGameRoleFull: true });
+            });
           }}
         />
       )}
