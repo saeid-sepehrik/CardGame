@@ -100,7 +100,9 @@ export const GameItem = () => {
                 ...m,
                 status: 4,
               };
-              updateRoleGame({ data: temp, updateGameRoleFull: true });
+              dispatch(
+                updateRoleGame({ data: temp, updateGameRoleFull: true })
+              );
             });
           }}
         />
