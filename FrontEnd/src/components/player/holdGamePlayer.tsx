@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { useNavigate } from "react-router-dom";
 import {
   setMessages,
   setPlayer,
@@ -24,6 +25,7 @@ export const HoldGamePlayer = () => {
   const { t } = useTranslation();
   const playerSelector = useAppSelector((s) => s.player);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const onChange = (checked: boolean) => {
     setDisabled(checked);
@@ -53,6 +55,13 @@ export const HoldGamePlayer = () => {
   useEffect(() => {
     if (playerSelector.dataRoleGame.status === 3)
       openNotification("bottomRight", "romoved game", "you remove from game.");
+  }, [playerSelector.dataRoleGame.status]);
+
+  useEffect(() => {
+    if (playerSelector.dataRoleGame.status === 4) {
+      localStorage.clear();
+      navigate("/");
+    }
   }, [playerSelector.dataRoleGame.status]);
 
   useEffect(() => {
