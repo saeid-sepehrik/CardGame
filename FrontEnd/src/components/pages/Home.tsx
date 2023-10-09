@@ -9,19 +9,18 @@ export const Home = () => {
   return (
     <>
       <Button
-        className="btn"
-        onClick={() => navigate("/newGame")}
+        className="btn btn-accent btn-outline"
         type="primary"
-        shape="round"
+        onClick={() => navigate("/newGame")}
         icon={<AppstoreAddOutlined />}
       >
         {t("button.create_game")}
       </Button>
 
       <Button
+        className="btn btn-accent btn-outline"
         onClick={() => navigate("/joinGame")}
         type="primary"
-        shape="round"
         icon={<LoginOutlined />}
       >
         {t("button.join_game")}

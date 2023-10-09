@@ -7,6 +7,7 @@ import "./i18n";
 import { ConfigProvider } from "antd";
 import { DirectionType } from "antd/es/config-provider";
 import { useTranslation } from "react-i18next";
+import "./index.css";
 
 function App() {
   const { t } = useTranslation();
