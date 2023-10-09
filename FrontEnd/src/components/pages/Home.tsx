@@ -9,6 +9,7 @@ export const Home = () => {
   return (
     <>
       <Button
+        className="btn"
         onClick={() => navigate("/newGame")}
         type="primary"
         shape="round"
