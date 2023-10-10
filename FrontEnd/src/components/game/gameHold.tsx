@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 
 import { useEffect } from "react";
 import { IGameRole, IRole, Iplayer } from "../../models/models";
-import { setRole } from "../newGame/role.slice";
+import { setRoleWithRoleGame } from "../newGame/newGame.slice";
 import { useTranslation } from "react-i18next";
 import { setDataGameRoleFull, setPlayer, setRoleGame } from "./game.slice";
 import { setloading } from "./game.slice";
@@ -11,7 +11,7 @@ import { GameItem } from "./gameItem";
 
 export const GameHold = () => {
   const gameSelector = useAppSelector((s) => s.game);
-  const roleSelector = useAppSelector((s) => s.role);
+  const roleSelector = useAppSelector((s) => s.newGame);
   const dispatch = useAppDispatch();
   const { i18n } = useTranslation();
 
@@ -25,7 +25,7 @@ export const GameHold = () => {
   ////role
   useEffect(() => {
     if (!roleSelector.receivedRole && gameSelector.receivedRoleGame) {
-      dispatch(setRole(gameSelector.dataRoleGame));
+      dispatch(setRoleWithRoleGame(gameSelector.dataRoleGame));
     }
   }, [gameSelector.receivedRoleGame]);
 

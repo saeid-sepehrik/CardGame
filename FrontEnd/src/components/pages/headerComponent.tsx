@@ -2,7 +2,6 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { Button, Col, Row, Select } from "antd";
 import { logout } from "../auth/auth.slice";
 import { useTranslation } from "react-i18next";
-import { useLocation } from "react-router-dom";
 
 export const HeaderComponent = () => {
   const auth = useAppSelector((s) => s.auth);
@@ -12,7 +11,6 @@ export const HeaderComponent = () => {
   const onChange = (value?: string) => {
     i18n.changeLanguage(value);
   };
-  const { pathname } = useLocation();
 
   return (
     <Row className="justify-center">

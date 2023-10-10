@@ -1,6 +1,6 @@
 import { UserOutlined, VideoCameraOutlined } from "@ant-design/icons";
 
-import { Layout, Menu, theme } from "antd";
+import { Layout, Menu } from "antd";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { Home } from "./Home";
 import { NewGame } from "../newGame/newGame";

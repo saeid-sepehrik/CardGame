@@ -1,5 +1,5 @@
-export interface IGroupType {
-  _id: string;
+export interface IGameType {
+  _id?: string;
   title: string;
   is_active: boolean;
   pic_path: string;
@@ -7,7 +7,7 @@ export interface IGroupType {
 }
 
 export interface IScenario {
-  _id: string;
+  _id?: string;
   id_game_type: string;
   title: string;
   title_fn: string;

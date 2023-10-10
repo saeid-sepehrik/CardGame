@@ -11,7 +11,8 @@
     "cancel": "Cancel",
     "join": "join",
     "send": "Send",
-    "close": "Close"
+    "close": "Close",
+    "reset": "Reset"
   },
   "steps": {
     "type": "type",

@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { IRole } from "../../models/models";
 import { CommentOutlined, GoldTwoTone } from "@ant-design/icons";
 import { Alert, Button, ConfigProvider, Space } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -8,17 +7,13 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { setGame } from "../game/game.slice";
 import { appApi } from "../../utility/appApi";
 import { useTranslation } from "react-i18next";
-export interface DoneProps {
-  gameTypeId: string;
-  scenario: number;
-  dataRoleSelected: IRole[];
-}
 
-export const Done = ({ scenario, gameTypeId, dataRoleSelected }: DoneProps) => {
+export const Done = () => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [warning, setwarning] = useState(false);
   const [chooseOnline, setchooseOnline] = useState(false);
   const navigate = useNavigate();
+  const newGamegameSelector = useAppSelector((s) => s.newGame);
   const gameSelector = useAppSelector((s) => s.game);
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
@@ -30,8 +25,8 @@ export const Done = ({ scenario, gameTypeId, dataRoleSelected }: DoneProps) => {
         // setLoading(true);
         const code = Math.floor(100000 + Math.random() * 900000);
         const data = {
-          code_scenario: scenario,
-          id_game_type: gameTypeId,
+          code_scenario: newGamegameSelector.scenarioSelected.code,
+          id_game_type: newGamegameSelector.gameTypeSelected._id,
           status: 1,
           code: code,
         };
@@ -47,7 +42,7 @@ export const Done = ({ scenario, gameTypeId, dataRoleSelected }: DoneProps) => {
   useEffect(() => {
     if (chooseOnline) {
       (async function () {
-        dataRoleSelected.forEach((drs) => {
+        newGamegameSelector.roleSelected.forEach((drs) => {
           (async function () {
             const requestOptions = {
               method: "POST",

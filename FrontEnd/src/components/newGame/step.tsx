@@ -21,6 +21,7 @@ export const Step = () => {
   return (
     <>
       <Steps
+        className="border-b-4"
         current={step.value}
         labelPlacement="vertical"
         onChange={(c) => {
