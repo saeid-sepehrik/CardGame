@@ -11,7 +11,7 @@ import { GameItem } from "./gameItem";
 
 export const GameHold = () => {
   const gameSelector = useAppSelector((s) => s.game);
-  const roleSelector = useAppSelector((s) => s.newGame);
+  const newGameSelector = useAppSelector((s) => s.newGame);
   const dispatch = useAppDispatch();
   const { i18n } = useTranslation();
 
@@ -24,7 +24,7 @@ export const GameHold = () => {
 
   ////role
   useEffect(() => {
-    if (!roleSelector.receivedRole && gameSelector.receivedRoleGame) {
+    if (!newGameSelector.receivedRole && gameSelector.receivedRoleGame) {
       dispatch(setRoleWithRoleGame(gameSelector.dataRoleGame));
     }
   }, [gameSelector.receivedRoleGame]);
@@ -37,11 +37,11 @@ export const GameHold = () => {
   ///roleGameFull
   useEffect(() => {
     if (
-      roleSelector.receivedRole &&
+      newGameSelector.receivedRole &&
       gameSelector.receivedPlayer &&
       gameSelector.receivedRoleGame
     ) {
-      const role: IRole[] = roleSelector.roleSelected;
+      const role: IRole[] = newGameSelector.roleSelected;
       const gameRole: IGameRole[] = gameSelector.dataRoleGame;
       const player: Iplayer[] = gameSelector.dataPlayer;
       // console.log(player);
@@ -66,7 +66,7 @@ export const GameHold = () => {
     }
   }, [
     gameSelector.ReadyForGetDataRoleGameFull,
-    roleSelector.receivedRole,
+    newGameSelector.receivedRole,
     gameSelector.receivedPlayer,
     gameSelector.receivedRoleGame,
   ]);

@@ -25,7 +25,7 @@ export const Step = () => {
         current={step.value}
         labelPlacement="vertical"
         onChange={(c) => {
-          dispatch(incrementByAmount(c));
+          if (step.value > c) dispatch(incrementByAmount(c));
         }}
         items={[
           {

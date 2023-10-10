@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { CommentOutlined, GoldTwoTone } from "@ant-design/icons";
-import { Alert, Button, ConfigProvider, Space } from "antd";
+import { Alert, Button, Col, ConfigProvider, Row, Space } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { setGame } from "../game/game.slice";
@@ -108,21 +108,31 @@ export const Done = () => {
           },
         }}
       >
-        <Space>
-          <Button
-            type="primary"
-            icon={<CommentOutlined />}
-            size={"large"}
-            onClick={() => {
-              countinueOnline();
-            }}
-          >
-            {t("button.continue_online")}
-          </Button>
-          <Button type="default" icon={<GoldTwoTone />} size={"large"}>
-            {t("button.continue_ofline")}
-          </Button>
-        </Space>
+        <Row justify="space-evenly" style={{}}>
+          <Col className="w-full p-5">
+            <Button
+              className="btn btn-neutral"
+              type="primary"
+              icon={<CommentOutlined />}
+              size={"large"}
+              onClick={() => {
+                countinueOnline();
+              }}
+            >
+              {t("button.continue_online")}
+            </Button>
+          </Col>
+          <Col className="w-full p-5">
+            <Button
+              className="btn btn-neutral"
+              type="primary"
+              icon={<GoldTwoTone />}
+              size={"large"}
+            >
+              {t("button.continue_ofline")}
+            </Button>
+          </Col>
+        </Row>
       </ConfigProvider>
       {warning && (
         <Alert

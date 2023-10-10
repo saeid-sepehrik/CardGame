@@ -16,7 +16,25 @@ export const Role = () => {
   const [increaseItem, setincreaseItem] = useState("");
   const dispatch = useAppDispatch();
   const newGameSelector = useAppSelector((s) => s.newGame);
+  const newGamegameSelector = useAppSelector((s) => s.newGame);
   const { i18n } = useTranslation();
+  useEffect(() => {
+    return () => {
+      dispatch(setDataRoleSelected([]));
+      const f: Array<number> = [];
+      newGamegameSelector.group.map(() => {
+        f.push(0);
+      });
+      dispatch(setgroupCount(f));
+      dispatch(
+        setDataRoleNewGame({
+          code: newGamegameSelector.scenarioSelected.code,
+          lang: i18n.language,
+        })
+      );
+    };
+  }, []);
+
   useEffect(() => {
     dispatch(
       setDataRoleNewGame({
