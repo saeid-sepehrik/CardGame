@@ -11,17 +11,15 @@ import { PlayerGame } from "../player/playerGame";
 import { ProtectedRout } from "./protectedRout";
 import { Main } from "../dashbord/main";
 import { useState } from "react";
+import { HeaderComponent } from "./headerComponent";
 const { Header, Content, Footer, Sider } = Layout;
 
 export const AppLayout = () => {
   const navigate = useNavigate();
   const [collapsedState, setcollapsedState] = useState(true);
 
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
   return (
-    <Layout>
+    <Layout className="bg-transparent">
       <Sider
         collapsed={collapsedState}
         breakpoint="lg"
@@ -53,35 +51,35 @@ export const AppLayout = () => {
           ]}
         />
       </Sider>
-      <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
-          header
+      <Layout className="bg-transparent" style={{ minHeight: "97vh" }}>
+        <Header className="bg-transparent p-0">
+          <HeaderComponent />
         </Header>
-        <Content style={{ margin: "24px 16px 0" }}>
-          <div
-            style={{
-              padding: 24,
-              minHeight: 360,
-              background: colorBgContainer,
-            }}
-          >
-            <Routes>
-              <Route path="/" element={<Home></Home>} />
-              <Route path="/newGame" element={<NewGame />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/game" element={<Game />} />
-              <Route path="/joinGame" element={<JoinGame />} />
-              <Route path="/playerGame" element={<PlayerGame />} />
-              <Route
-                path="/dashbord"
-                element={
-                  <ProtectedRout>
-                    <Main />
-                  </ProtectedRout>
-                }
-              />
-            </Routes>
-          </div>
+        <Content
+          style={{
+            // minHeight: "100%",
+            borderColor: "#670568",
+            // display: "table",
+          }}
+          className="m-0 border-8 border-solid bg-[url('../../../picture/background/bk.jpg')]"
+        >
+          <Routes>
+            <Route path="/" element={<Home></Home>} />
+            <Route path="/newGame" element={<NewGame />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/game" element={<Game />} />
+            <Route path="/joinGame" element={<JoinGame />} />
+            <Route path="/playerGame" element={<PlayerGame />} />
+            <Route
+              path="/dashbord"
+              element={
+                <ProtectedRout>
+                  <Main />
+                </ProtectedRout>
+              }
+            />
+          </Routes>
+          {/* </div> */}
         </Content>
         <Footer style={{ textAlign: "center" }}>
           Ant Design ©2023 Created by Ant UED
