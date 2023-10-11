@@ -117,6 +117,7 @@ export const WaitingGame = () => {
               {gameSelector.countJoined !== 0 &&
                 gameSelector.countAllPlayer === gameSelector.countJoined && (
                   <Button
+                    className="btn btn-neutral"
                     type="primary"
                     onClick={() => setgoToGame(true)}
                     shape="round"

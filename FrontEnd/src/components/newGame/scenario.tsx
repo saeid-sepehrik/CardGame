@@ -5,7 +5,11 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { incrementByAmount } from "./step.slice";
 import { useTranslation } from "react-i18next";
 import { appApi } from "../../utility/appApi";
-import { setScenarioSelected } from "./newGame.slice";
+import {
+  setDataRoleSelected,
+  setScenarioSelected,
+  setgroupCount,
+} from "./newGame.slice";
 
 export const Scenario = () => {
   const [dataSenario, setdataSenario] = useState<IScenario[]>([]);
@@ -16,9 +20,9 @@ export const Scenario = () => {
   const { i18n } = useTranslation();
 
   useEffect(() => {
+    dispatch(setDataRoleSelected([]));
+    dispatch(setgroupCount([]));
     (async function () {
-      // setLoading(true);
-
       const resp = await appApi.get(
         `scenario/${newGageSelector.gameTypeSelected._id}`
       );

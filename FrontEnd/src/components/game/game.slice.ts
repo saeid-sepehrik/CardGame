@@ -120,6 +120,7 @@ export const setDataMessagesPlayer = createAsyncThunk(
 
 export const setAlluser = createAsyncThunk("game/alluser", async () => {
   const resp = await appApi.get("/gameRole/" + localStorage.getItem("idGame"));
+  console.log(resp.data);
   return { count: resp.data.data.length };
 });
 

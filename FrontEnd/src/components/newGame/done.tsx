@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { CommentOutlined, GoldTwoTone } from "@ant-design/icons";
-import { Alert, Button, Col, ConfigProvider, Row, Space } from "antd";
+import { Alert, Button, Col, ConfigProvider, Row } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { setGame } from "../game/game.slice";
@@ -41,27 +41,26 @@ export const Done = () => {
   // create rolegame
   useEffect(() => {
     if (chooseOnline) {
-      (async function () {
-        newGamegameSelector.roleSelected.forEach((drs) => {
-          (async function () {
-            const requestOptions = {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                id_game: gameSelector.dataGame,
-                id_role: drs._id,
-                id_user: "",
-                status: 1,
-                score: 0,
-                newMessage: false,
-              }),
-            };
-            await fetch(`http://localhost:3000/api/gameRole/`, requestOptions);
-          })();
-        });
-
-        navigate("/game");
-      })();
+      console.log("requestOptions");
+      newGamegameSelector.roleSelected.forEach((drs) => {
+        (async function () {
+          const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              id_game: gameSelector.dataGame._id,
+              id_role: drs._id,
+              id_user: "",
+              status: 1,
+              score: 0,
+              newMessage: false,
+            }),
+          };
+          await fetch(`http://localhost:3000/api/gameRole/`, requestOptions);
+          console.log(requestOptions);
+        })();
+      });
+      navigate("/game");
     }
   }, [gameSelector.dataGame]);
 

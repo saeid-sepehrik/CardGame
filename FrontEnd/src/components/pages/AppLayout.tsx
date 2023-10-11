@@ -12,11 +12,16 @@ import { ProtectedRout } from "./protectedRout";
 import { Main } from "../dashbord/main";
 import { useState } from "react";
 import { HeaderComponent } from "./headerComponent";
+import { FooterComponent } from "./footerComponent";
+import { Setting } from "./setting";
+import { useTranslation } from "react-i18next";
+
 const { Header, Content, Footer, Sider } = Layout;
 
 export const AppLayout = () => {
   const navigate = useNavigate();
   const [collapsedState, setcollapsedState] = useState(true);
+  const { t } = useTranslation();
 
   return (
     <Layout className="bg-transparent">
@@ -28,7 +33,6 @@ export const AppLayout = () => {
           setcollapsedState(!collapsedState);
         }}
       >
-        {/* <div className="demo-logo-vertical" /> */}
         <Menu
           onClick={(info) => {
             setcollapsedState(!collapsedState);
@@ -41,12 +45,17 @@ export const AppLayout = () => {
             {
               key: "/",
               icon: <UserOutlined />,
-              label: "Home",
+              label: `${t("common.label.home")}`,
             },
             {
               key: "/newGame",
               icon: <VideoCameraOutlined />,
-              label: "New Game",
+              label: `${t("common.label.newGame")}`,
+            },
+            {
+              key: "/setting",
+              icon: <VideoCameraOutlined />,
+              label: `${t("common.label.setting")}`,
             },
           ]}
         />
@@ -70,6 +79,7 @@ export const AppLayout = () => {
             <Route path="/game" element={<Game />} />
             <Route path="/joinGame" element={<JoinGame />} />
             <Route path="/playerGame" element={<PlayerGame />} />
+            <Route path="/setting" element={<Setting />} />
             <Route
               path="/dashbord"
               element={
@@ -79,10 +89,9 @@ export const AppLayout = () => {
               }
             />
           </Routes>
-          {/* </div> */}
         </Content>
-        <Footer style={{ textAlign: "center" }}>
-          Ant Design ©2023 Created by Ant UED
+        <Footer className="py-2 bg-transparent">
+          <FooterComponent />
         </Footer>
       </Layout>
     </Layout>

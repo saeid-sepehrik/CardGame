@@ -14,7 +14,7 @@ router.get("/", async (req, res) => {
 router.get("/:idgame", async (req, res) => {
   // console.log(req.params.idgameType);
   const gameRole = await GameRole.find({ id_game: req.params.idgame });
-  // console.log({ 'id_game_type': req.params.idgameType });
+  console.log(gameRole);
   if (!gameRole) {
     res.status(404),
       res.json({
@@ -24,7 +24,7 @@ router.get("/:idgame", async (req, res) => {
   }
   res.json({
     data: gameRole,
-    message: "OK3",
+    message: "OK3444",
   });
 });
 

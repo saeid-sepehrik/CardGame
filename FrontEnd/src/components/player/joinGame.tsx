@@ -1,4 +1,4 @@
-import { Alert, Button, Form, Input, InputNumber } from "antd";
+import { Alert, Button, Form, Input, InputNumber, Row } from "antd";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
@@ -52,7 +52,7 @@ export const JoinGame = () => {
   }, [playerSelector.incorrectCodeGame]);
 
   return (
-    <>
+    <Row className="flex-1 justify-center border-2 m-10">
       {playerSelector.incorrectCodeGame && (
         <Alert
           message={t("player.alert.wrongCodeGametitle")}
@@ -66,10 +66,10 @@ export const JoinGame = () => {
         />
       )}
       <Form
-        labelCol={{ span: 4 }}
-        wrapperCol={{ span: 14 }}
-        layout="horizontal"
-        size="large"
+        labelCol={{ span: 8 }}
+        wrapperCol={{ span: 16 }}
+        style={{ maxWidth: 600 }}
+        initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
       >
@@ -83,16 +83,18 @@ export const JoinGame = () => {
         <Form.Item<joinFormType>
           label={t("player.label.code_game")}
           name="code"
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 16 }}
           rules={[{ required: true, message: t("player.alert.formCodeEmpty") }]}
         >
-          <InputNumber min={100000} max={999999} style={{ width: 300 }} />
+          <InputNumber min={100000} max={999999} />
         </Form.Item>
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">
+        <Form.Item>
+          <Button className="btn btn-neutral" type="primary" htmlType="submit">
             {t("button.join")}
           </Button>
         </Form.Item>
       </Form>
-    </>
+    </Row>
   );
 };
