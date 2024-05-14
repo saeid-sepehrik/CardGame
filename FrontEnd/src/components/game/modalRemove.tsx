@@ -1,11 +1,6 @@
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useEffect, useState } from "react";
-import {
-  IGameRoleFull,
-  setCountActivePlayer,
-  setRoleGame,
-  updateRoleGame,
-} from "./game.slice";
+import { IGameRoleFull, updateRoleGame } from "./game.slice";
 import { Button, Modal, Rate } from "antd";
 import { useTranslation } from "react-i18next";
 
@@ -45,7 +40,6 @@ export const ModalRemove = ({
       dispatch(
         updateRoleGame({ data: tempRoleGame[0], updateGameRoleFull: true })
       );
-      dispatch(setCountActivePlayer());
     }
     setrateValue(0);
     setGameRoleFullModalRemove(undefined);

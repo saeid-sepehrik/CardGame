@@ -41,7 +41,6 @@ export const Done = () => {
   // create rolegame
   useEffect(() => {
     if (chooseOnline) {
-      console.log("requestOptions");
       newGamegameSelector.roleSelected.forEach((drs) => {
         (async function () {
           const requestOptions = {
@@ -57,7 +56,6 @@ export const Done = () => {
             }),
           };
           await fetch(`http://localhost:3000/api/gameRole/`, requestOptions);
-          console.log(requestOptions);
         })();
       });
       navigate("/game");
@@ -67,11 +65,9 @@ export const Done = () => {
   const countinueOnline = () => {
     if (isOnline) {
       setchooseOnline(!chooseOnline);
-      // console.log("online");
       setwarning(false);
     } else {
       setwarning(true);
-      // console.log("ofline");
     }
   };
 

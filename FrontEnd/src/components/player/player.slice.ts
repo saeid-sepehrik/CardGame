@@ -81,7 +81,6 @@ export const setPlayer = createAsyncThunk("player/player", async () => {
 export const updateRoleGame = createAsyncThunk(
   "player/updateRoleGame",
   async (data: IGameRole) => {
-    console.log(data);
     await appApi.put("/gameRole/" + data._id, { data });
     return {};
   }

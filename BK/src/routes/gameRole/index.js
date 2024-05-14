@@ -12,9 +12,7 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:idgame", async (req, res) => {
-  // console.log(req.params.idgameType);
   const gameRole = await GameRole.find({ id_game: req.params.idgame });
-  console.log(gameRole);
   if (!gameRole) {
     res.status(404),
       res.json({
@@ -75,6 +73,7 @@ router.post(
 );
 
 router.put("/:id", async (req, res) => {
+  // res.send(req.body);
   const filter = { _id: req.params.id };
   const updateDoc = {
     $set: {
@@ -86,9 +85,10 @@ router.put("/:id", async (req, res) => {
       newMessage: req.body.data.newMessage,
     },
   };
-  const roleGame = await GameRole.updateOne(filter, updateDoc);
+  await GameRole.updateOne(filter, updateDoc);
+  const result = await GameRole.find(filter);
   res.json({
-    data: req.body.data,
+    data: result,
     message: "OK33",
   });
 });

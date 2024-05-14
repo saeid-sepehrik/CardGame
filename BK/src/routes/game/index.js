@@ -21,7 +21,6 @@ router.get("/:id", async (req, res) => {
 
 router.get("/withCode/:code", async (req, res) => {
   const game = await Game.find({ code: req.params.code });
-  console.log(game);
   if (game.length === 0) {
     res.status(404),
       res.json({
@@ -60,7 +59,6 @@ router.post(
       status: req.body.data.status,
       code: req.body.data.code,
     });
-    // console.log(newGame);
     newGame = await newGame.save();
     res.json({
       data: newGame,

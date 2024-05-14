@@ -47,10 +47,6 @@ export const JoinGame = () => {
     }
   }, [playerSelector.dataPlayer]);
 
-  useEffect(() => {
-    if (playerSelector.incorrectCodeGame) console.log("code incorrect");
-  }, [playerSelector.incorrectCodeGame]);
-
   return (
     <Row className="flex-1 justify-center border-2 m-10">
       {playerSelector.incorrectCodeGame && (
