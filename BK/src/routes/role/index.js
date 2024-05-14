@@ -31,6 +31,12 @@ router.get("/:code", async (req, res) => {
   else if (req.params.code == 2) codes.push(2, 3, 6, 7);
   else if (req.params.code == 4) codes.push(4, 5, 6, 7);
   const role = await Role.find({ mask_code_scenarios: { $in: codes } });
+  role.sort((a, b) => {
+    if (a.group > b.group) return -1;
+    if (a.group < b.group) return 1;
+    return 0;
+  });
+
   if (!role) {
     res.status(404),
       res.json({
@@ -46,9 +52,7 @@ router.get("/:code", async (req, res) => {
 });
 
 router.get("/getById/:id", async (req, res) => {
-  console.log(req.params.id);
   const role = await Role.findOne({ _id: req.params.id });
-  console.log(role);
   if (!role) {
     res.status(404),
       res.json({

@@ -37,7 +37,6 @@ export const ModalMessage = ({
   useEffect(() => {
     if (GameRoleFullModalMessage !== undefined) {
       dispatch(setloading(true));
-      console.log(GameRoleFullModalMessage.id_user);
       dispatch(setDataMessagesPlayer(GameRoleFullModalMessage.id_user));
       setIsModalMessageOpen(true);
     }

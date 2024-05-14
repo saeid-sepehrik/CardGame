@@ -1,12 +1,8 @@
 import { Avatar, Card, FloatButton, Rate } from "antd";
 import { DeleteOutlined, MessageOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { useEffect, useState } from "react";
-import {
-  IGameRoleFull,
-  setCountActivePlayer,
-  updateRoleGame,
-} from "./game.slice";
+import { useState } from "react";
+import { IGameRoleFull, updateRoleGame } from "./game.slice";
 import { LogoutOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -23,9 +19,6 @@ export const GameItem = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  useEffect(() => {
-    dispatch(setCountActivePlayer());
-  }, [dispatch, gameSelector.dataRoleGameFull]);
 
   const showModalMessage = (gameRoleFull: IGameRoleFull) => {
     setGameRoleFullModalMessage(gameRoleFull);
@@ -82,7 +75,7 @@ export const GameItem = () => {
         </Card>
       ))}
 
-      {gameSelector.CountActivePlayer === 0 && (
+      {gameSelector.dataRoleGame.filter((f) => f.status === 2).length === 0 && (
         <FloatButton
           icon={<LogoutOutlined />}
           description={t("gameItem.finish_game")}

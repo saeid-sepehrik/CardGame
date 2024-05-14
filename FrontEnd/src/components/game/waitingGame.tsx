@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   Badge,
   Button,
@@ -13,24 +13,16 @@ import {
 } from "antd";
 import { ArrowRightOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import {
-  setPlayer,
-  setRoleGame,
-  updateGame,
-  updateRoleGame,
-} from "./game.slice";
+import { setPlayer, updateGame, updateRoleGame } from "./game.slice";
 import { useTranslation } from "react-i18next";
 import { shuffle } from "../../utility/functions";
-import { appApi } from "../../utility/appApi";
 import { IGameRole } from "../../models/models";
 
 export const WaitingGame = () => {
-  // const [players, setplayers] = useState<Iplayer[]>([]);
   const gameSelector = useAppSelector((s) => s.game);
   const dispatch = useAppDispatch();
   const twoColors = { "0%": "#108ee9", "100%": "#87d068" };
   const { t } = useTranslation();
-  const [goToGame, setgoToGame] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -41,41 +33,31 @@ export const WaitingGame = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // updateRoleGame;
-  useEffect(() => {
-    if (goToGame) {
-      (async function () {
-        const resp = await appApi.get(
-          "/gameRole/" + localStorage.getItem("idGame")
-        );
-        const temp: IGameRole[] = resp.data.data;
-        const id_player: string[] = [];
-        gameSelector.dataPlayer.map((p) => {
-          id_player.push(p._id);
-        });
-        const id_player_shufle = shuffle(id_player);
-        temp
-          .filter((f) => f.status === 1)
-          .map((m, index) => {
-            const new_obj = {
-              ...m,
-              id_user: id_player_shufle[index],
-              status: 2,
-            };
-            dispatch(
-              updateRoleGame({ data: new_obj, updateGameRoleFull: false })
-            );
-          });
-      })();
-    }
-  }, [goToGame]);
+  function division() {
+    const temp: IGameRole[] = [...gameSelector.dataRoleGame];
+    const id_player_shufle = shuffle(
+      gameSelector.dataPlayer.map((m) => {
+        return m._id;
+      })
+    );
+    temp.map((m, index) => {
+      dispatch(
+        updateRoleGame({
+          data: { ...m, status: 2, id_user: id_player_shufle[index] },
+          updateGameRoleFull: false,
+        })
+      );
+    });
+  }
 
   useEffect(() => {
-    if (gameSelector.UpdateedRoleGame) dispatch(setRoleGame());
-  }, [gameSelector.UpdateedRoleGame]);
-
-  useEffect(() => {
-    if (gameSelector.receivedRoleGame) {
+    if (
+      gameSelector.dataRoleGame.length !== 0 &&
+      gameSelector.dataRoleGame.every((r) => {
+        if (r.status !== 2) return false;
+        return true;
+      })
+    ) {
       dispatch(
         updateGame({
           ...gameSelector.dataGame,
@@ -83,7 +65,7 @@ export const WaitingGame = () => {
         })
       );
     }
-  }, [gameSelector.receivedRoleGame]);
+  }, [gameSelector.dataRoleGame]);
 
   return (
     <>
@@ -114,12 +96,13 @@ export const WaitingGame = () => {
               }`}
               size="default"
             >
-              {gameSelector.countJoined !== 0 &&
-                gameSelector.countAllPlayer === gameSelector.countJoined && (
+              {gameSelector.dataPlayer.length !== 0 &&
+                gameSelector.dataRoleGame.length ===
+                  gameSelector.dataPlayer.length && (
                   <Button
                     className="btn btn-neutral"
                     type="primary"
-                    onClick={() => setgoToGame(true)}
+                    onClick={() => division()}
                     shape="round"
                     size="large"
                     icon={<ArrowRightOutlined />}
@@ -129,15 +112,15 @@ export const WaitingGame = () => {
                 )}
               <Statistic
                 title={t("waiting.status")}
-                value={gameSelector.countJoined}
-                suffix={" / " + gameSelector.countAllPlayer}
+                value={gameSelector.dataPlayer.length}
+                suffix={" / " + gameSelector.dataRoleGame.length}
               />
               <Space wrap>
                 <Progress
                   type="dashboard"
                   percent={Math.round(
-                    (gameSelector.countJoined * 100) /
-                      gameSelector.countAllPlayer
+                    (gameSelector.dataPlayer.length * 100) /
+                      gameSelector.dataRoleGame.length
                   )}
                   strokeColor={twoColors}
                 />
@@ -155,12 +138,14 @@ export const WaitingGame = () => {
             </Card>
           </Col>
         ))}
-        {(gameSelector.countJoined === 0 ||
-          gameSelector.countAllPlayer !== gameSelector.countJoined) && (
+        {(gameSelector.dataPlayer.length === 0 ||
+          gameSelector.dataRoleGame.length !==
+            gameSelector.dataPlayer.length) && (
           <Col span={6}>
             <Card title={t("waiting.card_title")} bordered={false} size="small">
               {t("waiting.card_detaile_1")}
-              {gameSelector.countAllPlayer - gameSelector.countJoined}{" "}
+              {gameSelector.dataRoleGame.length -
+                gameSelector.dataPlayer.length}
               {t("waiting.card_detaile_2")}
             </Card>
           </Col>
