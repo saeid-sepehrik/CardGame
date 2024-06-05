@@ -8,6 +8,10 @@ require("./startup/config")(app, express);
 require("./startup/db")();
 require("./startup/logging")();
 
+app.get("/", (req, res) => {
+  res.send("home page");
+});
+
 app.use("/api", router);
 
 const port = process.env.PORT || 3000;
