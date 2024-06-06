@@ -13,6 +13,7 @@ module.exports = function () {
 
   // const database = client.db("goveRole");
   // console.log(database);
+
   mangoose
     .connect(
       "mongodb+srv://saeidsepehrik:amVV9AfRfMC2my4u@giverole.gsgojrb.mongodb.net/?retryWrites=true&w=majority&appName=giveRole"
