@@ -6,7 +6,6 @@ module.exports = class {
   constructor() {
     autoBind(this);
     this.User = User;
-    console.log(User);
   }
 
   validationBody(req, res) {

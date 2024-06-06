@@ -1,7 +1,7 @@
 {
-    "name": "Card Game",
-    "db": {
-        "address": "mongodb://localhost:27017/cardGame"
-    },
-    "jwt_key": "sdf4s15fsdf211suikjgfldDFGads515t5bdfssd5fs5dFS5df"
+  "name": "Card Game",
+  "db": {
+    "address": "mongodb+srv://saeidsepehrik:amVV9AfRfMC2my4u@giverole.gsgojrb.mongodb.net/?retryWrites=true&w=majority&appName=giveRole"
+  },
+  "jwt_key": "sdf4s15fsdf211suikjgfldDFGads515t5bdfssd5fs5dFS5df"
 }
