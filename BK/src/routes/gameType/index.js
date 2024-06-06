@@ -1,28 +1,28 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const GameType = require('./../../models/gameTypeModel');
+const GameType = require("./../../models/gameTypeModel");
 
-router.get('/', async (req, res) => {
-    const gameType = await GameType.find();
-    res.json({
-        data: gameType,
-        message: 'OK3',
-    })
+router.get("/", async (req, res) => {
+  const gameType = await GameType.find();
+  res.json({
+    data: gameType,
+    message: "OK3",
+  });
 });
 
-router.get('/:id', async (req, res) => {
-    const gameType = await gameTypeModel.findById(_id == req.params.id)
-    if (!gameType) {
-        res.status(404),
-            res.json({
-                data: null,
-                message: 'game type not found'
-            })
-    }
-    res.json({
-        data: gameType,
-        message: 'OK3',
-    })
+router.get("/:id", async (req, res) => {
+  const gameType = await gameTypeModel.findById(_id == req.params.id);
+  if (!gameType) {
+    res.status(404),
+      res.json({
+        data: null,
+        message: "game type not found",
+      });
+  }
+  res.json({
+    data: gameType,
+    message: "OK3",
+  });
 });
 
 // router.post('/', [
@@ -95,6 +95,5 @@ router.get('/:id', async (req, res) => {
 //             message: 'ok',
 //         });
 //     });
-
 
 module.exports = router;
