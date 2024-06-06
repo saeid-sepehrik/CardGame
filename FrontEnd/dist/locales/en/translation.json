@@ -1,0 +1,78 @@
+{
+  "button": {
+    "join_game": "Join to game",
+    "create_game": "Create new",
+    "continue_online": "Continue online",
+    "continue_ofline": "Continue ofline ",
+    "division_role": "Division of roles",
+    "next": "next",
+    "remove": "remove",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "join": "join",
+    "send": "Send",
+    "close": "Close",
+    "reset": "Reset"
+  },
+  "steps": {
+    "type": "type",
+    "Scenarion": "Scenarion",
+    "Roles": "Roles",
+    "done": "How to start?"
+  },
+  "waiting": {
+    "code_game": "Code game",
+    "label": "join with code",
+    "joined": "joined",
+    "card_title": "waiting",
+    "card_detaile_1": "waiting for ",
+    "card_detaile_2": "more players",
+    "status": "status"
+  },
+  "gameItem": {
+    "removed": "removed",
+    "finish_game": "Finish Game",
+    "messageTo": "Message to ",
+    "maxLenghtText": "maxLength is 100",
+    "rateUSer": "Please rate the user",
+    "confirmRemoveUSer": "Are you sure to remove player ?"
+  },
+  "player": {
+    "alert": {
+      "wrongCodeGametitle": "code game was not correct",
+      "wrongCodeGameDescription": "Please check your code",
+      "formNameEmpty": "Please input your name!",
+      "formCodeEmpty": "Please input code!"
+    },
+    "label": {
+      "name": "name",
+      "code_game": "Code",
+      "disable": "Disable: ",
+      "newMessage": "New message",
+      "active": "Active",
+      "removed": "removed",
+      "newMessageNotofication": "You have new message.",
+      "removeGame": "remove !!!",
+      "newMessageRemovePlayer": "You remove to game"
+    },
+    "carousel": {
+      "message1": "You have successfully entered the game 👍",
+      "message2": "Wait for other players to enter.",
+      "message3": "After that, your card will be shown to you."
+    }
+  },
+  "config": {
+    "direction": "ltr"
+  },
+  "common": {
+    "label": {
+      "notMoreMessage": "It is all, nothing more 🤐",
+      "home": "Home",
+      "newGame": "new Game",
+      "setting": "Setting",
+      "language": "Language",
+      "english": "English",
+      "persian": "Persian"
+    }
+  }
+}
