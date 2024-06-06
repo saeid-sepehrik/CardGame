@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { setGame } from "../game/game.slice";
 import { appApi } from "../../utility/appApi";
 import { useTranslation } from "react-i18next";
-import { IGameRole } from "../../models/models";
 
 export const Done = () => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);

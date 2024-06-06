@@ -150,7 +150,8 @@ export const playerSlice = createSlice({
     builder.addCase(setRoleGame.rejected, () => {});
     builder.addCase(setRoleGame.fulfilled, (state, action) => {
       state.dataRoleGame = action.payload.data[0];
-      localStorage.setItem("idRoleGamePlayer", state.dataRoleGame._id);
+      if (state.dataRoleGame._id)
+        localStorage.setItem("idRoleGamePlayer", state.dataRoleGame._id);
       localStorage.setItem("idRolePlayer", state.dataRoleGame.id_role);
       if (state.dataRoleGame.newMessage)
         state.countUnreadMessage = state.dataMessages.filter(
