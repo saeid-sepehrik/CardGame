@@ -5,7 +5,6 @@ import {
   IRole,
   IScenario,
 } from "../../models/models";
-import axios from "axios";
 import { appApi } from "../../utility/appApi";
 
 export interface stepState {
@@ -50,10 +49,7 @@ export const setRoleWithRoleGame = createAsyncThunk(
     const article = {
       ids: ids,
     };
-    const resp = await axios.post(
-      "http://localhost:3000/api/role/game/game/",
-      article
-    );
+    const resp = await appApi.post("role/game/game/", article);
     return { data: resp.data.data };
   }
 );

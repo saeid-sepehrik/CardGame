@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { setGame } from "../game/game.slice";
 import { appApi } from "../../utility/appApi";
 import { useTranslation } from "react-i18next";
+import { IGameRole } from "../../models/models";
 
 export const Done = () => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
@@ -44,18 +45,14 @@ export const Done = () => {
       newGamegameSelector.roleSelected.forEach((drs) => {
         (async function () {
           const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              id_game: gameSelector.dataGame._id,
-              id_role: drs._id,
-              id_user: "",
-              status: 1,
-              score: 0,
-              newMessage: false,
-            }),
+            id_game: gameSelector.dataGame._id,
+            id_role: drs._id,
+            id_user: "",
+            status: 1,
+            score: 0,
+            newMessage: false,
           };
-          await fetch(`http://localhost:3000/api/gameRole/`, requestOptions);
+          await appApi.post("gameRole/", requestOptions);
         })();
       });
       navigate("/game");

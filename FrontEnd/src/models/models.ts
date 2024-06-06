@@ -31,7 +31,7 @@ export interface IRole {
 }
 
 export interface IGameRole {
-  _id: string;
+  _id?: string;
   id_game: string;
   id_role: string;
   id_user: string;
