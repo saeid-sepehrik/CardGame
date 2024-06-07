@@ -72,7 +72,8 @@
       "setting": "Setting",
       "language": "Language",
       "english": "English",
-      "persian": "Persian"
+      "persian": "Persian",
+      "menu": "menu"
     }
   }
 }
